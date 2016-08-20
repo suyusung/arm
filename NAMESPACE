@@ -1,0 +1,161 @@
+importFrom(graphics,
+    "abline",
+    "axis",
+    "box",
+    "image",
+    "layout",
+    "lines",
+    "par",
+    "plot",
+    "points",
+    "polygon",
+    "rect",
+    "segments",
+    "text",
+    "title")
+
+
+importFrom(grDevices,
+    "gray",
+    "heat.colors",
+    "rainbow")
+
+importFrom(methods,
+    "as",
+    "getMethod",
+    "new",
+    "setOldClass",
+    "signature")
+
+
+importFrom(utils,
+    "packageDescription",
+    "read.fwf")
+
+
+
+importFrom(Matrix,
+      "t",
+      "crossprod",
+      "tcrossprod",
+      "colMeans",
+      "Diagonal"
+)
+
+importFrom(stats,
+    ".getXlevels",
+    ".checkMFClasses", "AIC", "as.formula", "binomial", "coefficients", "coef",
+    "contrasts<-", "cor", "dcauchy", "delete.response", "deviance", "dlogis",
+    "dnorm", "dt", "family", "fitted", "formula", "gaussian", "glm.control",
+    "is.empty.model", "lm.fit", "logLik", "model.extract", "model.frame", "model.matrix",
+    "model.matrix.default", "model.offset", "model.response", "model.weights",
+    "na.exclude", "na.omit", "na.pass", "napredict", "optim", "predict", "pcauchy",
+    "plogis", "pnorm",
+    "qt", "rchisq", "rgamma", "rnorm", "sd", "terms", "terms.formula", "var", "vcov")
+
+
+importFrom(coda,
+    "nvar",
+    "varnames",
+    "nchain"
+)
+
+importFrom(MASS,
+            "polr",
+            "mvrnorm"
+)
+
+
+importFrom(nlme,
+      "fixef",
+      "ranef",
+      "VarCorr"
+
+)
+
+importFrom(lme4,
+     "getME",
+     "isREML",
+     "refitML"
+)
+
+importFrom(abind, "abind")
+
+
+
+exportClasses(
+              "balance",
+              "bayesglm",
+              "bayespolr",
+              "sim",
+              "sim.merMod"
+              )
+
+exportMethods(
+              "coefplot",
+              "display",
+              "mcsamp",
+              "se.coef",
+              "sim",
+              "print",
+              "show",
+              "standardize",
+              "traceplot"
+              )
+
+export(
+       "extractDIC",
+       "balance",
+       "bayesglm",
+       "bayesglm.fit",
+       "bayespolr",
+       "binnedplot",
+       "binned.resids",
+       "coefplot",
+       "coefplot.default",
+       "contr.bayes.ordered",
+       "contr.bayes.unordered",
+       "corrplot",
+       "display",
+       "discrete.histogram",
+       "discrete.hist",
+       "fround",
+       "G",
+       "go",
+       "invlogit",
+       "logit",
+       "matching",
+       "mcsamp",
+       "model.matrixBayes",
+       "multicomp.plot",
+       "mcplot",
+       "pfround",
+       "read.columns",
+       "rescale",
+       "residual.plot",
+       "se.coef",
+       "se.fixef",
+       "se.ranef",
+       "sigma.hat",
+       "sim",
+       "traceplot",
+       "triangleplot"
+)
+
+
+S3method(extractDIC, merMod)
+S3method(print, GO)
+S3method(plot, balance)
+S3method(print, balance)
+S3method(predict, bayesglm)
+S3method(coef, sim)
+S3method(coef, sim.polr)
+S3method(coef, sim.merMod)
+S3method(fitted, sim.merMod)
+S3method(fixef, sim.merMod)
+S3method(ranef, sim.merMod)
+S3method(sigma.hat, lm)
+S3method(sigma.hat, glm)
+S3method(sigma.hat, merMod)
+S3method(sigma.hat, sim)
+S3method(sigma.hat, sim.merMod)

@@ -1,0 +1,32 @@
+Package: arm
+Version: 1.8-6
+Date: 2015-7-7
+Title: Data Analysis Using Regression and Multilevel/Hierarchical
+        Models
+Authors@R: c(person("Andrew", "Gelman", role = "aut", email = "gelman@stat.columbia.edu"),
+             person("Yu-Sung", "Su", role =  c("aut", "cre"), email = "suyusung@tsinghua.edu.cn"),
+             person("Masanao", "Yajima", role =  "ctb", email = "yajima@stat.ucla.edu"),
+             person("Jennifer", "Hill", role =  "ctb", email = "jennifer.hill@nyu.edu"),
+             person("Maria Grazia", "Pittau", role =  "ctb", email = "grazia@stat.columbia.edu"),
+             person("Jouni", "Kerman", role =  "ctb", email = "jouni@kerman.com"),
+             person("Tian", "Zheng", role =  "ctb", email = "tzheng@stat.columbia.edu"),
+             person("Vicent", "Dorie", role =  "ctb", email = "vjd4@nyu.edu")
+             )
+Author: Andrew Gelman [aut],
+  Yu-Sung Su [aut, cre],
+  Masanao Yajima [ctb],
+  Jennifer Hill [ctb],
+  Maria Grazia Pittau [ctb],
+  Jouni Kerman [ctb],
+  Tian Zheng [ctb],
+  Vicent Dorie [ctb]
+Maintainer: Yu-Sung Su <suyusung@tsinghua.edu.cn>
+Depends: R (>= 3.1.0), MASS, Matrix (>= 1.0), stats, lme4 (>= 1.0)
+Imports: abind, coda, graphics, grDevices, methods, nlme, utils
+Description: R functions for processing 'lm', 'glm', 'svy.glm', 'merMod' and 'polr' outputs.
+URL: http://CRAN.R-project.org/package=arm
+License: GPL (>= 2)
+NeedsCompilation: no
+Packaged: 2015-07-10 22:24:17 UTC; suyusung
+Repository: CRAN
+Date/Publication: 2015-07-11 11:02:14
