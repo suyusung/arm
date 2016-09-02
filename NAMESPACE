@@ -25,6 +25,7 @@ importFrom(methods,
     "getMethod",
     "new",
     "setOldClass",
+    "show",
     "signature")
 
 
