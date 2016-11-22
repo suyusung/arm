@@ -31,3 +31,8 @@ vignettes/*.pdf
 # Temporary files created by R markdown
 *.utf8.md
 *.knit.md
+.svn/entries
+*.svn-base
+.svn/wc.db
+*.db-journal
+.svn/format
