@@ -1,5 +1,5 @@
 Package: arm
-Version: 1.9-2
+Version: 1.9-3
 Date: 2016-11-21
 Title: Data Analysis Using Regression and Multilevel/Hierarchical
         Models
@@ -24,7 +24,7 @@ Maintainer: Yu-Sung Su <suyusung@tsinghua.edu.cn>
 BugReports: https://github.com/suyusung/arm/issues/
 Depends: R (>= 3.1.0), MASS, Matrix (>= 1.0), stats, lme4 (>= 1.0)
 Imports: abind, coda, graphics, grDevices, methods, nlme, utils
-Description: R functions for processing 'lm', 'glm', 'svy.glm', 'merMod' and 'polr' outputs.
-URL: http://CRAN.R-project.org/package=arm
+Description: Functions to accompany A. Gelman and J. Hill, Data Analysis Using Regression and Multilevel/Hierarchical Models, Cambridge University Press, 2007.
+URL: https://CRAN.R-project.org/package=arm
 License: GPL (>= 3)
 NeedsCompilation: no
