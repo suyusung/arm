@@ -40,11 +40,12 @@ setMethod("sim", signature(object = "glm"),
     n <- summ$df[1] + summ$df[2]
     k <- summ$df[1]
     V.beta <- corr.beta * array(sd.beta,c(k,k)) * t(array(sd.beta,c(k,k)))
-    beta <- array (NA, c(n.sims,k))
-    dimnames(beta) <- list (NULL, dimnames(beta.hat)[[1]])
-    for (s in 1:n.sims){
-      beta[s,] <- MASS::mvrnorm (1, beta.hat, V.beta)
-    }
+    #beta <- array (NA, c(n.sims,k))
+#    dimnames(beta) <- list (NULL, dimnames(beta.hat)[[1]])
+#    for (s in 1:n.sims){
+#      beta[s,] <- MASS::mvrnorm (1, beta.hat, V.beta)
+#    }
+    beta <- MASS::mvrnorm (n.sims, beta.hat, V.beta)
     # Added by Masanao
     beta2 <- array (0, c(n.sims,length(coefficients(object))))
     dimnames(beta2) <- list (NULL, names(coefficients(object)))

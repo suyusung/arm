@@ -76,7 +76,7 @@
   display(M1)
   M1.1 <- glm (y ~ rescale(x), family=binomial(link="logit"))
   display(M1.1)
-  M1.2 <- standardize(M1.1)
+  M1.2 <- standardize(M1)
   display(M1.2)
   # M1.1 & M1.2 should be the same
   M2 <- polr(ordered(y2) ~ x)

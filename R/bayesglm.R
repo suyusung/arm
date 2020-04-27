@@ -202,7 +202,11 @@ bayesglm.fit <- function (x, y, weights = rep(1, nobs), start = NULL, etastart =
             prior.scale <- prior.scale*2*sd(y)
         }
         prior.scale.0 <- prior.scale
-        if(nvars==0) nvars = 1
+        if(nvars==0&intercept){ # this is need to reajust nvars when intercept is TRUE
+            nvars <- 1
+        }else if(intercept){
+            nvars <- nvars + 1
+        }
         for(j in 1:nvars){
             x.obs <- x[,j]
             x.obs <- x.obs[!is.na(x.obs)]

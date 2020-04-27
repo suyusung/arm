@@ -1,4 +1,13 @@
-<<<<<<< HEAD
+2020-4-27 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
+      * DESCRIPTION: (Version, Date): 1.11.0
+      * NAMESPACE: import setClass from methods  (BUGS reported by Henrik)
+
+2018-4-12 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
+      * DESCRIPTION: (Version, Date): 1.10.1
+      * R/bayesglm: fix a bug where scale=TRUE the prior.scale miscount the nvars.
+      * R/sim.glm: improve the speed.  
+      * man/standardized: fix a typo in the example
+
 2016-11-24 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
       * DESCRIPTION: (Version, Date): 1.9-3
       * DESCRIPTION: new description, and change http to https in URL
@@ -8,7 +17,7 @@
 =======
 2016-9-2 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
       * DESCRIPTION: add BugReports and change LICENSE to GPL >=3
->>>>>>> parent of 10648fa... Doc fix Vincent's name
+      * Doc fix Vincent's name
 
 2016-8-21 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
    * DESCRIPTION (Version, Date): 1.9-1
