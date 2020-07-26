@@ -14,6 +14,9 @@ importFrom(graphics,
     "text",
     "title")
 
+importFrom(Hmisc,
+    "wtd.var")
+
 
 importFrom(grDevices,
     "gray",
@@ -53,7 +56,8 @@ importFrom(stats,
     "model.matrix.default", "model.offset", "model.response", "model.weights",
     "na.exclude", "na.omit", "na.pass", "napredict", "optim", "predict", "pcauchy",
     "plogis", "pnorm",
-    "qt", "rchisq", "rgamma", "rnorm", "sd", "terms", "terms.formula", "var", "vcov")
+    "qt", "rchisq", "rgamma", "rnorm", "sd", "terms", "terms.formula", "var", "vcov",
+    "weighted.mean")
 
 
 importFrom(coda,

@@ -48,10 +48,10 @@ fit <- glm(treat ~ re74 + re75 + age + factor(educ) +
             family=binomial(link="logit"))
 pscores <- predict(fit, type="response")
 matches <- matching(z=lalonde$treat, score=pscores)
-matched <- lalonde[matches$matched,]
+matched <- matches$cnts
 
 # balance check!
-b.stats <- balance(lalonde, matched, fit)
+b.stats <- balance(lalonde, treat, matched)
 print(b.stats)
 plot(b.stats)
 }

@@ -1,11 +1,11 @@
 Package: arm
-Version: 1.11-0
-Date: 2020-4-27
+Version: 1.11-2
+Date: 2020-7-27
 Title: Data Analysis Using Regression and Multilevel/Hierarchical
         Models
 Authors@R: c(person("Andrew", "Gelman", role = "aut", email = "gelman@stat.columbia.edu"),
              person("Yu-Sung", "Su", role =  c("aut", "cre"), email = "suyusung@tsinghua.edu.cn"),
-             person("Masanao", "Yajima", role =  "ctb", email = "yajima@stat.ucla.edu"),
+             person("Masanao", "Yajima", role =  "ctb", email = "yajima@bu.edu"),
              person("Jennifer", "Hill", role =  "ctb", email = "jennifer.hill@nyu.edu"),
              person("Maria Grazia", "Pittau", role =  "ctb", email = "grazia@stat.columbia.edu"),
              person("Jouni", "Kerman", role =  "ctb", email = "jouni@kerman.com"),
@@ -23,7 +23,8 @@ Author: Andrew Gelman [aut],
 Maintainer: Yu-Sung Su <suyusung@tsinghua.edu.cn>
 BugReports: https://github.com/suyusung/arm/issues/
 Depends: R (>= 3.1.0), MASS, Matrix (>= 1.0), stats, lme4 (>= 1.0)
-Imports: abind, coda, graphics, grDevices, methods, nlme, utils
+Imports: abind, coda, graphics, grDevices, Hmisc, methods, nlme, utils
 Description: Functions to accompany A. Gelman and J. Hill, Data Analysis Using Regression and Multilevel/Hierarchical Models, Cambridge University Press, 2007.
+License: GPL (> 2) 
 URL: https://CRAN.R-project.org/package=arm
-License: GPL (>= 3)
+

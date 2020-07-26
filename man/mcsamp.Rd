@@ -43,7 +43,7 @@
      distribution of the parameters of a fitted model using Markov
      Chain Monte Carlo methods. It automatically simulates multiple 
      sequences and allows convergence to be monitored. The function relies on
-     \code{\link[lme4]{mcmcsamp}} in \code{lme4}.
+     \code{mcmcsamp} in \code{lme4}.
 }
 
 \value{
@@ -65,7 +65,6 @@ functions in the "R2WinBUGS" package.
 
 \seealso{\code{\link{display}},
         \code{\link[lme4]{lmer}},
-        \code{\link[lme4]{mcmcsamp}},
         \code{\link{sim}}
         }
 

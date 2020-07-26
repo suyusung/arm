@@ -13,31 +13,31 @@
   This function computes the balance statistics before and after matching.
 }
 \usage{
-balance(rawdata, matched, pscore.fit, factor=TRUE)
+balance(rawdata, treat, matched, estimand="ATT")
 
-\method{print}{balance}(x, \dots, digits = 2)
+\method{print}{balance}(x, \dots, combined = FALSE, digits = 2)
 
-\method{plot}{balance}(x, longcovnames = NULL, 
-    main = "Standardized Difference in Means",
-    v.axis=TRUE, cex.main = 1, 
-    cex.vars = 0.8, cex.pts = 0.8, 
-    mar=c(0,3,5.1,2), plot=TRUE, \dots)
+\method{plot}{balance}(x, longcovnames=NULL, which.covs="mixed",
+    v.axis=TRUE, cex.main=1, cex.vars=1, cex.pts=1,
+    mar=c(4, 3, 5.1, 2), plot=TRUE, x.max = NULL, \ldots)
 }
 
 \arguments{
-  \item{rawdata}{data before using \code{matching} function, see the example below.}
-  \item{matched}{matched data using \code{matching} function, see the example below.}
-  \item{pscore.fit}{glm.fit object to get propensity scores.}
-  \item{factor}{default is \code{TRUE} which will display the factorized categorical variables. In
-        a situation where no equal levels of factorized categorical variables is observed,
-        use factor=FALSE to proceed.}
+  \item{rawdata}{The full covariate dataset}
+  \item{treat}{the vector of treatment assignments for the full dataset}
+  \item{matched}{vector of weights to apply to the full dataset to create the
+   restructured data: for matching without replacement these will all be 0's and 1's; 
+   for one-to-one matching with replacement these will all be non-negative
+   integers; for IPTW or more complicated matching methods these could be any non-negative numbers}
+  \item{estimand}{can either be \code{ATT}, \code{ATC}, or \code{ATE}, default is \code{ATT}}
   \item{x}{an object return by the balance function.}
+  \item{combined}{default is \code{FALSE}}
   \item{digits}{minimal number of \emph{significant} digits, default is 2.}
   \item{longcovnames}{long covariate names.  If not provided, plot will 
             use covariate variable name by default}
-  \item{main}{The main title (on top) using font and size (character
-          expansion) \code{par("font.main")} and color \code{par("col.main")};
-          default title is \code{Standardized Difference in Means}.}
+  \item{which.covs}{\code{mixed} then it plots all as std diffs;
+    \code{binary} it only plots binary and as abs unstd diffs;
+    \code{cont} it only plots non-binary and as abs std diffs}
   \item{v.axis}{default is \code{TRUE}, which shows the top axis--axis(3).}
   \item{cex.main}{font size of main title}
   \item{cex.vars}{font size of variabel names}
@@ -46,6 +46,7 @@ balance(rawdata, matched, pscore.fit, factor=TRUE)
           which gives the number of lines of margin to be specified on
           the four sides of the plot. The default is \code{c(0,3,5.1,2)}.}
   \item{plot}{default is \code{TRUE}, which will plot the plot.}
+  \item{x.max}{set the max of the \code{xlim}, default is \code{NULL}}
   \item{\dots}{other plot options may be passed to this function}
 }
 \details{
@@ -66,7 +67,7 @@ balance(rawdata, matched, pscore.fit, factor=TRUE)
             \emph{Data Analysis Using Regression and Multilevel/Hierarchical Models}.
             Cambridge University Press. (Chapter 10)}
 
-\author{Jennifer Hill \email{jh1030@columbia.edu}; 
+\author{Jennifer Hill \email{jennifer.hill@nyu.edu}; 
         Yu-Sung Su \email{suyusung@tsinghua.edu.cn}
         }
 
@@ -84,10 +85,10 @@ fit <- glm(treat ~ re74 + re75 + age + factor(educ) +
             family=binomial(link="logit"))
 pscores <- predict(fit, type="link")
 matches <- matching(z=lalonde$treat, score=pscores)
-matched <- lalonde[matches$matched,]
+matched <- matches$cnts
 
 # balance check
-b.stats <- balance(lalonde, matched, fit)
+b.stats <- balance(lalonde, treat, matched, estimand = "ATT")
 print(b.stats)
 plot(b.stats)
 par(old.par)

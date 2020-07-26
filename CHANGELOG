@@ -1,3 +1,10 @@
+2020-7-27 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
+      * DESCRIPTION: (Version, Date): 1.11.2
+      * NAMESPACE: import weighted.mean from stats and wtd.var from Hmisc
+      * R/balance: new balance, print.balance, plot.balance function
+      * R/matching: new matching function
+      * man/balance: new description to new functions
+
 2020-4-27 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
       * DESCRIPTION: (Version, Date): 1.11.0
       * NAMESPACE: import setClass from methods  (BUGS reported by Henrik)
