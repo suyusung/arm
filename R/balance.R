@@ -72,7 +72,7 @@ balance <- function (rawdata, treat, matched, estimand="ATT")
     # separate variances by group == only used as input to calculations below
     # these overwrite the variance above
     var.t[i] <- var(rawdata[treat == 1, i])
-    var.c[i] <- unname(stats::cov.wt(rawdata[treat == 0, i, drop = FALSE], wt = wts0)$cov)
+    var.c[i] <- as.numeric(stats::cov.wt(rawdata[treat == 0, i, drop = FALSE], wt = wts0)$cov)
     # difference in means
     diff.means.matched[i, 3] <- diff.means.matched[i, 1] - diff.means.matched[i, 2]
     # absolute standardized difference in means (denominator is stolen from
