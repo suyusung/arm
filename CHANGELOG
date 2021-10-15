@@ -1,6 +1,6 @@
 2021-10-08 Marius Barth   <marius.barth@uni-koeln.de>
       * DESCRIPTION: removed the Hmisc package from Imports field
-      * NAMESPACE: Do not import wtd.var from Hmisc, anymore
+      * NAMESPACE: Do not import wtd.var from Hmisc, anymore (this is to increase crossplatform compatibility)
       * R/balance.R Replace call to Hmisc::wtd.var() with call to stats::cov.wt()
 
 2020-7-27 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
