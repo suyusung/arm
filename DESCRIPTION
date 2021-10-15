@@ -4,7 +4,7 @@ Date: 2021-10-15
 Title: Data Analysis Using Regression and Multilevel/Hierarchical
         Models
 Authors@R: c(person("Andrew", "Gelman", role = "aut", email = "gelman@stat.columbia.edu"),
-             person("Yu-Sung", "Su", role =  c("aut", "cre"), email = "suyusung@tsinghua.edu.cn"),
+             person("Yu-Sung", "Su", role =  c("aut", "cre"), email = "suyusung@tsinghua.edu.cn", comment = c(ORCID="0000-0001-5021-8209")),
              person("Masanao", "Yajima", role =  "ctb", email = "yajima@bu.edu"),
              person("Jennifer", "Hill", role =  "ctb", email = "jennifer.hill@nyu.edu"),
              person("Maria Grazia", "Pittau", role =  "ctb", email = "grazia@stat.columbia.edu"),
