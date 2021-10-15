@@ -1,7 +1,7 @@
-2021-9-30 Marius Barth   <marius.barth@uni-koeln.de>
+2021-10-08 Marius Barth   <marius.barth@uni-koeln.de>
       * DESCRIPTION: removed the Hmisc package from Imports field
       * NAMESPACE: Do not import wtd.var from Hmisc, anymore
-      * R/Hmisc-package.R: added a copy of function wtd.var from Hmisc package
+      * R/balance.R Replace call to Hmisc::wtd.var() with call to stats::cov.wt()
 
 2020-7-27 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
       * DESCRIPTION: (Version, Date): 1.11.2
