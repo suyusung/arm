@@ -28,7 +28,7 @@
   \code{DehejiaWahba}, replicates one of the models from Dehejia and
   Wahba (1999).  The second demo, \code{AbadieImbens}, replicates the
   models produced by Abadie and Imbens
-  \url{http://scholar.harvard.edu/imbens/scholar_software/matching-estimators}.
+  \url{https://scholar.harvard.edu/imbens/scholar_software/matching-estimators}.
   Many of these models are found to produce good balance for the Lalonde
   data.
   }
