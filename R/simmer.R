@@ -15,10 +15,10 @@ setMethod("sim", signature(object = "merMod"),
     Rzx <- getME(regression, "RZX");
     Rx  <- getME(regression, "RX");
 
-    # upper left, lower right, and lower left blocks of left-factor
-    # of inverse
-    solveFunc <- getMethod("solve", signature(a = "CHMfactor", b = "diagonalMatrix"));
-    Rz.inv  <- t(solveFunc(Lz, Diagonal(Lz@Dim[1]), "L"));
+    # upper left, lower right, and lower left blocks of left-factor of inverse
+    #solveFunc <- getMethod("solve", signature(a = "CHMfactor", b = "diagonalMatrix"));
+    #Rz.inv  <- t(solveFunc(Lz, Diagonal(Lz@Dim[1]), "L"));
+    Rz.inv <- t(solve(Lz, Diagonal(Lz@Dim[1]), system = "L"));
     Rx.inv  <- solve(Rx);
     Rzx.inv <- -Rz.inv %*% Rzx %*% Rx.inv;
 

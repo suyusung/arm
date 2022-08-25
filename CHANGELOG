@@ -1,3 +1,8 @@
+2022-8-25 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
+      * DESCRIPTION: (Version, Date): 1.12.1
+      * NAMESPACE: import solve from Matrix
+      * R/simmer: comment out solveFun(), and use solve from Matrix direclty
+
 2020-7-27 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
       * DESCRIPTION: (Version, Date): 1.11.2
       * NAMESPACE: import weighted.mean from stats and wtd.var from Hmisc

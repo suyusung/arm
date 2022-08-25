@@ -44,7 +44,8 @@ importFrom(Matrix,
       "crossprod",
       "tcrossprod",
       "colMeans",
-      "Diagonal"
+      "Diagonal",
+      "solve"
 )
 
 importFrom(stats,
