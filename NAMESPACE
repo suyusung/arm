@@ -14,10 +14,6 @@ importFrom(graphics,
     "text",
     "title")
 
-importFrom(Hmisc,
-    "wtd.var")
-
-
 importFrom(grDevices,
     "gray",
     "heat.colors",

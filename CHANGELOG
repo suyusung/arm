@@ -1,23 +1,33 @@
 2022-8-25 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
-      * DESCRIPTION: (Version, Date): 1.12.1
+      * DESCRIPTION: (Version, Date): 1.13.1
       * NAMESPACE: import solve from Matrix
       * R/simmer: comment out solveFun(), and use solve from Matrix direclty
 
+2021-10-15 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
+      * DESCRIPTION: (Version, Date): 1.12-2
+      * man/lalonde.Rd: fixed the link to lalonde data (from http to https)
+     
+2021-10-08 Marius Barth   <marius.barth@uni-koeln.de>
+      * DESCRIPTION: (Version, Date): removed the Hmisc package from Imports field
+      * NAMESPACE: Do not import wtd.var from Hmisc, anymore (this is to increase crossplatform compatibility)
+      * R/balance.R: Replace call to Hmisc::wtd.var() with call to stats::cov.wt()
+
+
 2020-7-27 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
-      * DESCRIPTION: (Version, Date): 1.11.2
+      * DESCRIPTION: (Version, Date): 1.11-2
       * NAMESPACE: import weighted.mean from stats and wtd.var from Hmisc
       * R/balance: new balance, print.balance, plot.balance function
       * R/matching: new matching function
       * man/balance: new description to new functions
 
 2020-4-27 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
-      * DESCRIPTION: (Version, Date): 1.11.0
+      * DESCRIPTION: (Version, Date): 1.11-0
       * NAMESPACE: import setClass from methods  (BUGS reported by Henrik)
 
 2018-4-12 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
-      * DESCRIPTION: (Version, Date): 1.10.1
+      * DESCRIPTION: (Version, Date): 1.10-1
       * R/bayesglm: fix a bug where scale=TRUE the prior.scale miscount the nvars.
-      * R/sim.glm: improve the speed.  
+      * R/sim.glm: improve the speed.
       * man/standardized: fix a typo in the example
 
 2016-11-24 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
