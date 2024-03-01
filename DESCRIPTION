@@ -1,10 +1,12 @@
 Package: arm
-Version: 1.13-1
-Date: 2022-8-25
+Version: 1.14-1
+Date: 2024-3-1
 Title: Data Analysis Using Regression and Multilevel/Hierarchical
         Models
 Authors@R: c(person("Andrew", "Gelman", role = "aut", email = "gelman@stat.columbia.edu"),
-             person("Yu-Sung", "Su", role =  c("aut", "cre"), email = "suyusung@tsinghua.edu.cn"),
+             person("Yu-Sung", "Su", role =  c("aut", "cre"), 
+		email = "suyusung@tsinghua.edu.cn", 
+		comment =c(ORCID = "0000-0001-5021-8209")),
              person("Masanao", "Yajima", role =  "ctb", email = "yajima@bu.edu"),
              person("Jennifer", "Hill", role =  "ctb", email = "jennifer.hill@nyu.edu"),
              person("Maria Grazia", "Pittau", role =  "ctb", email = "grazia@stat.columbia.edu"),
@@ -28,6 +30,3 @@ Description: Functions to accompany A. Gelman and J. Hill, Data Analysis Using R
 License: GPL (> 2)
 URL: https://CRAN.R-project.org/package=arm
 NeedsCompilation: no
-Packaged: 2022-08-28 19:33:28 UTC; suyus
-Repository: CRAN
-Date/Publication: 2022-08-28 20:00:02 UTC
