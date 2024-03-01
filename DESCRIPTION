@@ -28,4 +28,6 @@ Description: Functions to accompany A. Gelman and J. Hill, Data Analysis Using R
 License: GPL (> 2)
 URL: https://CRAN.R-project.org/package=arm
 NeedsCompilation: no
-
+Packaged: 2022-08-28 19:33:28 UTC; suyus
+Repository: CRAN
+Date/Publication: 2022-08-28 20:00:02 UTC
