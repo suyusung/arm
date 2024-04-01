@@ -1,12 +1,12 @@
 Package: arm
-Version: 1.14-1
-Date: 2024-3-1
+Version: 1.14-2
+Date: 2024-4-1
 Title: Data Analysis Using Regression and Multilevel/Hierarchical
         Models
 Authors@R: c(person("Andrew", "Gelman", role = "aut", email = "gelman@stat.columbia.edu"),
              person("Yu-Sung", "Su", role =  c("aut", "cre"), 
-		email = "suyusung@tsinghua.edu.cn", 
-		comment =c(ORCID = "0000-0001-5021-8209")),
+		          email = "suyusung@tsinghua.edu.cn", 
+		          comment = c(ORCID = "0000-0001-5021-8209")),
              person("Masanao", "Yajima", role =  "ctb", email = "yajima@bu.edu"),
              person("Jennifer", "Hill", role =  "ctb", email = "jennifer.hill@nyu.edu"),
              person("Maria Grazia", "Pittau", role =  "ctb", email = "grazia@stat.columbia.edu"),
@@ -15,14 +15,14 @@ Authors@R: c(person("Andrew", "Gelman", role = "aut", email = "gelman@stat.colum
              person("Vincent", "Dorie", role =  "ctb", email = "vjd4@nyu.edu")
              )
 Author: Andrew Gelman [aut],
-  Yu-Sung Su [aut, cre],
+  Yu-Sung Su [aut, cre] (<https://orcid.org/0000-0001-5021-8209>),
   Masanao Yajima [ctb],
   Jennifer Hill [ctb],
   Maria Grazia Pittau [ctb],
   Jouni Kerman [ctb],
   Tian Zheng [ctb],
   Vincent Dorie [ctb]
-Maintainer: Yu-Sung Su <suyusung@tsinghua.edu.cn>
+Maintainer: Yu-Sung Su <suyusung@tsinghua.edu.cn> 
 BugReports: https://github.com/suyusung/arm/issues/
 Depends: R (>= 3.1.0), MASS, Matrix (>= 1.0), stats, lme4 (>= 1.0)
 Imports: abind, coda, graphics, grDevices, methods, nlme, utils

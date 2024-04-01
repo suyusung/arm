@@ -10,18 +10,18 @@
 
 # new functions! 
 
-as.matrix.VarCorr <- function (varc, useScale, digits){
+as.matrix.VarCorr <- function (x, useScale, digits){
 # VarCorr function for lmer objects, altered as follows:
 #   1.  specify rounding
 #   2.  print statement at end is removed
 #   3.  reMat is returned
 #   4.  last line kept in reMat even when there's no error term
-                  sc <- attr(varc, "sc")[[1]]   
+                  sc <- attr(x, "sc")[[1]]   
                   if(is.na(sc)) sc <- 1 
 #                  recorr <- lapply(varc, function(el) el@factors$correlation)
-                  recorr <- lapply(varc, function(el) attr(el, "correlation"))
+                  recorr <- lapply(x, function(el) attr(el, "correlation"))
                   #reStdDev <- c(lapply(recorr, slot, "sd"), list(Residual = sc))
-                  reStdDev <- c(lapply(varc, function(el) attr(el, "stddev")), list(Residual = sc))
+                  reStdDev <- c(lapply(x, function(el) attr(el, "stddev")), list(Residual = sc))
                   reLens <- unlist(c(lapply(reStdDev, length)))
                   reMat <- array('', c(sum(reLens), 4),
                                  list(rep('', sum(reLens)),
