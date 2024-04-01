@@ -10,7 +10,7 @@
 
 # new functions! 
 
-as.matrix.VarCorr <- function (x, useScale, digits){
+as.matrix.VarCorr <- function (x, ..., useScale, digits){
 # VarCorr function for lmer objects, altered as follows:
 #   1.  specify rounding
 #   2.  print statement at end is removed
