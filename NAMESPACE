@@ -31,7 +31,8 @@ importFrom(methods,
 
 importFrom(utils,
     "packageDescription",
-    "read.fwf")
+    "read.fwf",
+    "methods")
 
 
 
@@ -52,7 +53,7 @@ importFrom(stats,
     "is.empty.model", "lm.fit", "logLik", "model.extract", "model.frame", "model.matrix",
     "model.matrix.default", "model.offset", "model.response", "model.weights",
     "na.exclude", "na.omit", "na.pass", "napredict", "optim", "predict", "pcauchy",
-    "plogis", "pnorm",
+    "plogis", "pnorm", "residuals",
     "qt", "rchisq", "rgamma", "rnorm", "sd", "terms", "terms.formula", "var", "vcov",
     "weighted.mean")
 

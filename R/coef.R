@@ -17,6 +17,9 @@ coef.sim.polr <- function(object, slot=c("ALL", "coef", "zeta"),...){
   return(ans)
 }
 
+
+
+
 coef.sim.merMod <- function(object,...){
   fef <- object@fixef
   ref <- object@ranef

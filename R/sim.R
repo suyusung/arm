@@ -61,27 +61,158 @@ setMethod("sim", signature(object = "glm"),
 )
 
 
-
-
-
 setMethod("sim", signature(object = "polr"),
-    function(object, n.sims=100){
-  x <- as.matrix(model.matrix(object))
-  coefs <- coef(object)
-  k <- length(coefs)
-  zeta <- object$zeta
-  Sigma <- vcov(object)
+  function(object, n.sims = 100) {
+    if (!requireNamespace("MASS", quietly = TRUE)) {
+      stop("Package 'MASS' is required for this function. Please install it.")
+    }
 
-  if(n.sims==1){
-    parameters <- t(MASS::mvrnorm(n.sims, c(coefs, zeta), Sigma))
-  }else{
-    parameters <- MASS::mvrnorm(n.sims, c(coefs, zeta), Sigma)
+    # Extract coefficients and thresholds
+    coefs <- coef(object)
+    zeta <- object$zeta
+    
+    # Number of regression coefficients
+    k <- length(coefs)
+    
+    # Variance-covariance matrix of all parameters (coefficients + thresholds)
+    Sigma <- vcov(object)
+    
+    # Draw parameters from multivariate normal distribution
+    parameters <- MASS::mvrnorm(n = n.sims, mu = c(coefs, zeta), Sigma = Sigma)
+    
+    # If only one simulation, ensure 'parameters' has dimension (1, nparams)
+    if (n.sims == 1) {
+      parameters <- matrix(parameters, nrow = 1)
+    }
+    
+    # Create new "sim.polr" object with coefficients and thresholds separated
+    ans <- new("sim.polr",
+               coef = parameters[, 1:k, drop = FALSE],
+               zeta = parameters[, (k + 1):ncol(parameters), drop = FALSE]
+    )
+    
+    return(ans)
   }
-  ans <- new("sim.polr",
-              coef = parameters[,1:k,drop=FALSE],
-              zeta = parameters[,-(1:k),drop=FALSE])
+)
+
+sim.coxph <- function(object, n.sims = 100) {
+  if (!requireNamespace("MASS", quietly = TRUE)) {
+    stop("Package 'MASS' needed for this function to work. Please install it.")
+  }
+  
+  # Check object class
+  if (!inherits(object, "coxph")) {
+    stop("Input object is not a coxph model.")
+  }
+  
+  # Extract coef estimates
+  beta.hat <- coef(object)
+  if (is.null(beta.hat)) stop("Could not extract coefficients from the coxph object.")
+
+  # Extract variance-covariance matrix of coefficient estimates
+  V.beta <- tryCatch(vcov(object),
+                     error = function(e) stop("Could not extract variance-covariance matrix from coxph object."))
+
+  k <- length(beta.hat)
+  beta.sim <- matrix(NA, nrow = n.sims, ncol = k)
+  colnames(beta.sim) <- names(beta.hat)
+  
+  for (i in seq_len(n.sims)) {
+    beta.sim[i, ] <- MASS::mvrnorm(1, mu = beta.hat, Sigma = V.beta)
+  }
+  
+  # For consistency with sim.plm, return a list of simulated coefs
+  ans <- list(coef = beta.sim)
+  class(ans) <- "sim.coxph"
+  
   return(ans)
-})
+}
+
+sim.plm <- function(object, n.sims = 100) {
+  # Load required package
+  if (!requireNamespace("MASS", quietly = TRUE)) {
+    stop("Package 'MASS' needed for this function to work. Please install it.")
+  }
+  
+  # Extract model frame (data used in the fitted model)
+  mf <- tryCatch(model.frame(object),
+                 error = function(e) stop("Cannot extract model frame from the object."))
+  
+  # Extract coefficients and their standard errors
+  summ <- tryCatch(summary(object),
+                   error = function(e) stop("Cannot compute summary for the model object."))
+  
+  # Try to get coefficients table reliably
+  coefmat <- tryCatch(
+    {
+      # Most models have coef matrix under summ$coefficients or summ$coef
+      if (!is.null(summ$coefficients)) {
+        summ$coefficients[, 1:2, drop = FALSE]
+      } else if (!is.null(summ$coef)) {
+        summ$coef[, 1:2, drop = FALSE]
+      } else {
+        stop("Coefficient matrix not found in summary(object).")
+      }
+    },
+    error = function(e) stop("Error extracting coefficient matrix from summary: ", e$message)
+  )
+  dimnames(coefmat)[[2]] <- c("coef.est", "coef.sd")
+  
+  # Number of observations (rows) and parameters
+  n <- nrow(mf)
+  k <- nrow(coefmat)
+  
+  # Estimate residual standard deviation
+  # Use deviance or residual variance if available, otherwise fallback
+  sigma.hat <- tryCatch({
+    dev <- deviance(object)
+    if(is.null(dev)) stop("deviance() returned NULL")
+    sqrt(dev / (n - k))
+  }, error = function(e) {
+    # fallback: try sigma method
+    if("sigma" %in% methods(class = class(object))) {
+      sigma(object)
+    } else {
+      # fallback: use residuals to estimate sigma
+      res <- residuals(object)
+      if (is.null(res)) stop("Cannot estimate residual standard deviation")
+      sqrt(sum(res^2) / (n - k))
+    }
+  })
+  
+  # Unscale covariance matrix of coefficients if necessary
+  # Sometimes vcov(object) already includes sigma^2, so unscale it:
+  Vbeta_raw <- tryCatch(vcov(object),
+                        error = function(e) stop("Failed to get vcov of the object"))
+  
+  # Check if Vbeta_raw is scaled by sigma.hat^2 (heuristic)
+  # If max diagonal is more than 100 times sigma.hat^2, probably not scaled
+  diag_vcov <- diag(Vbeta_raw)
+  if(all(diag_vcov > 0) && max(diag_vcov) > 100 * sigma.hat^2) {
+    # Assume vcov returns unscaled covariance of coefficients: multiply by sigma^2
+    V.beta <- Vbeta_raw * sigma.hat^2
+  } else {
+    # Assume vcov gives scaled covariance (multiplied by sigma^2), so unscale it
+    V.beta <- Vbeta_raw
+  }
+  
+  # Preallocate outputs
+  sigma <- numeric(n.sims)
+  beta <- matrix(NA, nrow = n.sims, ncol = k)
+  colnames(beta) <- rownames(coefmat)
+  
+  for (s in seq_len(n.sims)) {
+    # Draw sigma from scaled inverse-chi-squared distribution
+    sigma[s] <- sigma.hat * sqrt( (n - k) / rchisq(1, df = n - k) )
+    
+    # Draw beta conditional on sigma
+    beta[s, ] <- MASS::mvrnorm(1, mu = coefmat[, "coef.est"], Sigma = V.beta * sigma[s]^2)
+  }
+  
+  ans <- list(coef = beta, sigma = sigma)
+  class(ans) <- "sim"
+  return(ans)
+}
 
 
 
