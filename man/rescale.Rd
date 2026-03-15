@@ -48,5 +48,12 @@ rescale(x, binary.inputs="center")
   y <- rbinom (n, 1, invlogit(b0+b1*x1+b2*x2))
   rescale(x, "full")
   rescale(y, "center")
+  
+  # For binary factor
+  print(rescale(gl(2, 1), binary.inputs = "-0.5,0.5"))  # Should return c(-0.5, 0.5)
+
+  # For a 5-point Likert scale (e.g., levels: 1, 2, 3, 4, 5)
+  print(rescale(factor(c(1, 2, 3, 4, 5)), binary.inputs = "center"))  # Centered around the mean
+
 }
 \keyword{manip}
