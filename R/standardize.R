@@ -48,16 +48,16 @@ standardize.default <- function(call, unchanged = NULL,
   # Define the new variables
   if (is.null(call$data)) {
     for (i in transformed.variables) {
-      assign(varnames.new[i], rescale(get(varnames[i]), binary.inputs), envir = .GlobalEnv)
+      assign(varnames.new[i], rescale(get(varnames[i]), binary.inputs))
     }
   } else {
     newvars <- NULL
     for (i in transformed.variables) {
       new_var <- rescale(get(as.character(call$data))[[varnames[i]]], binary.inputs)
-      assign(varnames.new[i], new_var, envir = .GlobalEnv)  # Assign to global environment
+      assign(varnames.new[i], new_var)  # Assign to global environment
       newvars <- cbind(newvars, new_var)  # Combine new variables for output
     }
-    assign(as.character(call$data), cbind(get(as.character(call$data)), newvars), envir = .GlobalEnv)
+    assign(as.character(call$data), cbind(get(as.character(call$data)), newvars))
   }
   
   # Now call the regression with the new variables

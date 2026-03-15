@@ -48,7 +48,7 @@
 \references{Andrew Gelman. (2008).
     \dQuote{Scaling regression inputs by dividing by two standard deviations.} 
     \emph{Statistics in Medicine} 27: 2865--2873.
-    \url{http://www.stat.columbia.edu/~gelman/research/published/standardizing7.pdf}
+    \url{https://sites.stat.columbia.edu/gelman/research/published/standardizing7.pdf}
 }
 
 \author{Andrew Gelman \email{gelman@stat.columbia.edu}

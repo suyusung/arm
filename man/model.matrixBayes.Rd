@@ -50,7 +50,7 @@ though; they can be identified using \code{\link{bayesglm}}.% and
             \dQuote{A Weakly Informative Default Prior Distribution For
             Logistic And Other Regression Models.}
             \emph{The Annals of Applied Statistics} 2 (4): 1360--1383.
-            \url{http://www.stat.columbia.edu/~gelman/research/published/priors11.pdf}
+            \url{https://sites.stat.columbia.edu/gelman/research/published/priors11.pdf}
 }
 
 \seealso{
