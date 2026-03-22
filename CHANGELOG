@@ -1,4 +1,8 @@
 2026-03-15 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
+      * DESCRIPTION: (Version, Date): 1.15.2
+      * R/rescale: fix a bug previous coded in rescale that breaks standardize()
+
+2026-03-15 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
       * DESCRIPTION: (Version, Date): 1.15.1
       * R/sim: add hidden function for sim.plm and sim.coxph
       * R/standardize: rewrite the function

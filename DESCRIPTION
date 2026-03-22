@@ -1,6 +1,6 @@
 Package: arm
-Version: 1.15-1
-Date: 2026-3-15
+Version: 1.15-2
+Date: 2026-3-22
 Title: Data Analysis Using Regression and Multilevel/Hierarchical
         Models
 Authors@R: c(person("Andrew", "Gelman", role = "aut", email = "gelman@stat.columbia.edu"),
