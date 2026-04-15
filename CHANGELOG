@@ -1,3 +1,8 @@
+2026-04-15 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
+      * DESCRIPTION: (Version, Date): 1.15.2
+      * R/standardize: fix a bug when formula is inputed as an object.
+      * man/standardize: and an example to reflect the aformentioned change.
+
 2026-03-15 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
       * DESCRIPTION: (Version, Date): 1.15.2
       * R/rescale: fix a bug previous coded in rescale that breaks standardize()

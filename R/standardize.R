@@ -1,6 +1,6 @@
 standardize.default <- function(call, unchanged = NULL,
                                  standardize.y = FALSE, binary.inputs = "center") {
-  form <- call$formula
+  form <- eval(call$formula, envir = parent.frame())
   varnames <- all.vars(form)
   n.vars <- length(varnames)
   

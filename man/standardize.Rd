@@ -86,6 +86,9 @@
   M2.2 <- standardize(M2.1)
   display(M2.2)
   # M2.1 & M2.2 should be the same
+  form <- y ~ x1 + x2  # input formula as an object
+  M3 <- glm(form, family=binomial)
+  M3.1 <- standardize(M3)
 }
 \keyword{manip}
 \keyword{models}
