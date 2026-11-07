@@ -18,9 +18,15 @@ setMethod("sim", signature(object = "merMod"),
     # upper left, lower right, and lower left blocks of left-factor of inverse
     #solveFunc <- getMethod("solve", signature(a = "CHMfactor", b = "diagonalMatrix"));
     #Rz.inv  <- t(solveFunc(Lz, Diagonal(Lz@Dim[1]), "L"));
-    Rz.inv <- t(solve(Lz, Diagonal(Lz@Dim[1]), system = "L"));
-    Rx.inv  <- solve(Rx);
-    Rzx.inv <- -Rz.inv %*% Rzx %*% Rx.inv;
+    Rz.inv  <- t(solve(Lz, Diagonal(Lz@Dim[1]), system = "L"))
+    Rx.inv  <- solve(Rx)
+    Rzx.inv <- -Rz.inv %*% Rzx %*% Rx.inv
+
+    # Undo the fill-reducing permutation (rows), via a sparse permutation matrix
+    perm <- Lz@perm + 1L
+    unperm <- function(m) { out <- m; out[perm, ] <- m; out }
+    Rz.inv  <- unperm(Rz.inv)
+    Rzx.inv <- unperm(Rzx.inv)
 
     # this is me figuring some stuff out. new lmer doesn't permute Zt apparently
     #
