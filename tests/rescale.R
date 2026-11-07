@@ -10,6 +10,9 @@
 ## 0.5 from x, which is only correct when the variable is already coded 0/1,
 ## so rescale(c(1, 2), "-0.5,0.5") gave 0.5, 1.5.  It now maps the two
 ## observed values onto -0.5 and 0.5, so both codings agree.
+##
+## Also pinned: an unrecognised binary.inputs must be an error.  It used to
+## fall through every branch and return NULL invisibly for a binary variable.
 ## =====================================================================
 
 library(arm)
@@ -74,3 +77,36 @@ f3 <- factor(c("a", "b", "b", "c", "c", "c"))
 r3 <- rescale(f3)
 stopifnot("multi-level factor should be scaled, not centred" =
             length(unique(r3)) == 3)
+
+## ---- an unrecognised binary.inputs is an error, not a silent NULL ------
+## For a binary variable, a value outside the four documented options used to
+## fall through every branch and return NULL invisibly; for a continuous one
+## it was ignored.  Both are now an error.
+bad <- function(expr) inherits(try(expr, silent = TRUE), "try-error")
+stopifnot("a bad binary.inputs gave no error for a binary numeric" =
+            bad(rescale(c(0, 1), binary.inputs = "bogus")))
+stopifnot("a bad binary.inputs gave no error for a factor" =
+            bad(rescale(gl(2, 1), binary.inputs = "bogus")))
+stopifnot("a bad binary.inputs gave no error for a continuous variable" =
+            bad(rescale(c(1, 2, 3, 4), binary.inputs = "bogus")))
+stopifnot("a non-character binary.inputs gave no error" =
+            bad(rescale(gl(2, 1), binary.inputs = 1)))
+stopifnot("a length-2 binary.inputs gave no error" =
+            bad(rescale(gl(2, 1), binary.inputs = c("center", "full"))))
+stopifnot("a NULL binary.inputs gave no error" =
+            bad(rescale(gl(2, 1), binary.inputs = NULL)))
+
+## the message has to name the offending value, or it is not actionable
+msg <- tryCatch(rescale(gl(2, 1), binary.inputs = "bogus"),
+                error = function(e) conditionMessage(e))
+stopifnot("the error does not name the offending value" =
+            grepl("bogus", msg, fixed = TRUE))
+stopifnot("the error does not list the allowed values" =
+            all(vapply(c("center", "0/1", "-0.5,0.5", "full"),
+                       function(v) grepl(v, msg, fixed = TRUE), logical(1))))
+
+## and the four documented values all still work
+stopifnot("a documented binary.inputs was rejected" =
+            all(vapply(c("center", "0/1", "-0.5,0.5", "full"),
+                       function(v) !bad(rescale(gl(2, 1), binary.inputs = v)),
+                       logical(1))))

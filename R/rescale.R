@@ -1,4 +1,18 @@
 rescale <- function(x, binary.inputs = "center") {
+    # Reject anything but the four documented options up front.  An
+    # unrecognised value used to fall through every branch below and
+    # return NULL invisibly for a binary variable, and was silently
+    # ignored for a continuous one.
+    allowed <- c("center", "0/1", "-0.5,0.5", "full")
+    if (length(binary.inputs) != 1L || !is.character(binary.inputs) ||
+        !binary.inputs %in% allowed) {
+        stop("`binary.inputs` must be one of ",
+             paste0("\"", allowed, "\"", collapse = ", "),
+             if (is.character(binary.inputs) && length(binary.inputs) == 1L)
+                 paste0("; got \"", binary.inputs, "\"") else "",
+             call. = FALSE)
+    }
+
     # Convert x to numeric if its not already
     if (!is.numeric(x)) {
         # Store the original levels for categorical variables

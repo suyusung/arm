@@ -5,6 +5,10 @@
         which is only correct for a variable already coded 0/1, so a numeric binary
         variable coded 1/2 gave 0.5 and 1.5.  That is the same bug as issue #19, which
         had been fixed for factors only.
+      * R/rescale: an unrecognised "binary.inputs" is now an error.  For a binary
+        variable a value outside the four documented options fell through every
+        branch and returned NULL invisibly, and for a continuous variable it was
+        silently ignored.
       * man/rescale: state the binary.inputs options precisely, including that "0/1" and
         "-0.5,0.5" are invariant to how the variable is coded.
       * tests: first regression suite, run by R CMD check.  Plain R scripts on purpose,

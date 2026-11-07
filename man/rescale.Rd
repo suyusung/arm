@@ -16,7 +16,7 @@ rescale(x, binary.inputs="center")
   \item{binary.inputs}{options for standardizing binary variables, default is \code{center}; \code{0/1} maps the two values
     to 0 and 1; \code{-0.5,0.5} maps the two values to -0.5 and 0.5; \code{center} substracts the mean; and 
     \code{full} substracts the mean and divids by 2 sd.  The first two are invariant to how the binary variable is
-    coded, so a variable coded 1/2 gives the same answer as one coded 0/1.}
+    coded, so a variable coded 1/2 gives the same answer as one coded 0/1.  Any other value is an error.}
 }
 
 \value{
