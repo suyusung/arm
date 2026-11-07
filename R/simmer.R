@@ -45,7 +45,7 @@ setMethod("sim", signature(object = "merMod"),
 
     #P.ranef <- getRanefPerm(model);
     #Lambda <- P.ranef %*% getRanefChol(model) %*% t(P.ranef);
-    Lambda <- t(getME(regression, "Lambda"));
+    Lambda <- getME(regression, "Lambda");
 
     return(list(ul = Lambda %*% Rz.inv, ur = Lambda %*% Rzx.inv, lr = Rx.inv));
   }
