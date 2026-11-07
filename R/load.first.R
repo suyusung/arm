@@ -1,7 +1,9 @@
-.onAttach <- function(...) {
-  mylib <- dirname(system.file(package = "arm"))
-  ver <- packageDescription("arm", lib.loc = mylib)$Version
-  builddate <- packageDescription("arm", lib.loc = mylib)$Date
-  packageStartupMessage(paste("\narm (Version ", ver, ", built: ", builddate, ")\n", sep = ""))
+.onAttach <- function(libname, pkgname) {
+  desc <- packageDescription(pkgname, lib.loc = libname)
+  if (!is.list(desc))
+    desc <- suppressWarnings(packageDescription(pkgname))
+  ver <- if (is.list(desc)) desc$Version else getNamespaceVersion(pkgname)
+  builddate <- if (is.list(desc) && !is.null(desc$Date)) desc$Date else "unknown"
+  packageStartupMessage(paste("\n", pkgname, " (Version ", ver, ", built: ", builddate, ")\n", sep = ""))
   packageStartupMessage("Working directory is ", getwd(), "\n")
 }

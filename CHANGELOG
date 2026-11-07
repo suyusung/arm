@@ -1,3 +1,19 @@
+2026-11-07 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
+      * DESCRIPTION: (Version, Date): 1.15-4
+      * DESCRIPTION: license changed from GPL (>= 2) to GPL (>= 3), i.e. GPL-3.0-or-later.
+      * R/simmer: fix sim() for merMod, whose random-effect draws did not match the model's
+        covariance: the fill-reducing permutation of the sparse Cholesky factor was never
+        undone, and Lambda was transposed (issue #26; fix contributed by David Skalinder
+        in pull request #27).
+      * R/simmer: undo that permutation with a sparse permutation matrix instead of by
+        base-R subassignment, the latter being several hundred times slower on large
+        models (follow-up to pull request #27).
+      * R/load.first: .onAttach no longer derives the library location from system.file(),
+        which searches .libPaths() rather than the library the package was loaded from;
+        it now uses the libname R passes to the hook, and no longer aborts when the
+        package description cannot be found (issue #25).
+      * NAMESPACE: import sparseMatrix from Matrix.
+
 2026-04-15 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
       * DESCRIPTION: (Version, Date): 1.15.2
       * R/standardize: fix a bug when formula is inputed as an object.
