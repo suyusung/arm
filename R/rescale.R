@@ -20,7 +20,13 @@ rescale <- function(x, binary.inputs = "center") {
             return(x)  # Return original scale
         }
         else if (binary.inputs == "-0.5,0.5") {
-            return(x - 0.5)  # Rescale to [-0.5, 0.5]
+            # Map the two observed values onto -0.5 and 0.5, whatever
+            # they happen to be, so a variable coded 1/2 is treated
+            # like one coded 0/1.  Subtracting 0.5 from x only works
+            # when the input is already 0/1, which gave 0.5/1.5 for a
+            # 1/2-coded variable (the same bug as issue #19, which was
+            # fixed for factors only).
+            return((x - min(x.obs)) / (max(x.obs) - min(x.obs)) - 0.5)
         }
         else if (binary.inputs == "center") {
             return(x - mean(x.obs))  # Center the variable

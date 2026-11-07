@@ -1,4 +1,21 @@
 2026-11-07 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
+      * DESCRIPTION: (Version, Date): 1.15-5
+      * R/rescale: "binary.inputs = -0.5,0.5" now maps the two observed values onto -0.5
+        and 0.5 whatever the variable is coded as.  It previously subtracted 0.5 from x,
+        which is only correct for a variable already coded 0/1, so a numeric binary
+        variable coded 1/2 gave 0.5 and 1.5.  That is the same bug as issue #19, which
+        had been fixed for factors only.
+      * man/rescale: state the binary.inputs options precisely, including that "0/1" and
+        "-0.5,0.5" are invariant to how the variable is coded.
+      * tests: first regression suite, run by R CMD check.  Plain R scripts on purpose,
+        so there is no new dependency.  tests/simmer.R pins the sim() covariance fix
+        (issue #26), tests/load-first.R the .onAttach guard (issue #25),
+        tests/standardize.R the formula-in-an-object fix (issue #24) and tests/rescale.R
+        the binary handling above.  Each was checked to FAIL against the code it guards,
+        not merely to pass against the fix.
+      * .github/workflows/R-CMD-check.yaml: run R CMD check on push and pull request.
+
+2026-11-07 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
       * DESCRIPTION: (Version, Date): 1.15-4
       * DESCRIPTION: license changed from GPL (>= 2) to GPL (>= 3), i.e. GPL-3.0-or-later.
       * R/simmer: fix sim() for merMod, whose random-effect draws did not match the model's
