@@ -42,6 +42,7 @@ importFrom(Matrix,
       "tcrossprod",
       "colMeans",
       "Diagonal",
+      "sparseMatrix",
       "solve"
 )
 

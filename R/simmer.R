@@ -24,9 +24,9 @@ setMethod("sim", signature(object = "merMod"),
 
     # Undo the fill-reducing permutation (rows), via a sparse permutation matrix
     perm <- Lz@perm + 1L
-    unperm <- function(m) { out <- m; out[perm, ] <- m; out }
-    Rz.inv  <- unperm(Rz.inv)
-    Rzx.inv <- unperm(Rzx.inv)
+    Pt <- t(sparseMatrix(i = seq_along(perm), j = perm, x = 1))
+    Rz.inv  <- Pt %*% Rz.inv
+    Rzx.inv <- Pt %*% Rzx.inv
 
     # this is me figuring some stuff out. new lmer doesn't permute Zt apparently
     #
