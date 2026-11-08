@@ -1,5 +1,5 @@
 2026-11-07 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
-      * DESCRIPTION: (Version, Date): 1.15-5
+      * DESCRIPTION: (Version, Date): 1.15-4
       * R/rescale: "binary.inputs = -0.5,0.5" now maps the two observed values onto -0.5
         and 0.5 whatever the variable is coded as.  It previously subtracted 0.5 from x,
         which is only correct for a variable already coded 0/1, so a numeric binary
@@ -24,7 +24,6 @@
         and a grouped function index.
 
 2026-11-07 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
-      * DESCRIPTION: (Version, Date): 1.15-4
       * DESCRIPTION: license changed from GPL (>= 2) to GPL (>= 3), i.e. GPL-3.0-or-later.
       * R/simmer: fix sim() for merMod, whose random-effect draws did not match the model's
         covariance: the fill-reducing permutation of the sparse Cholesky factor was never
