@@ -17,7 +17,6 @@
         tests/standardize.R the formula-in-an-object fix (issue #24) and tests/rescale.R
         the binary handling above.  Each was checked to FAIL against the code it guards,
         not merely to pass against the fix.
-      * .github/workflows/R-CMD-check.yaml: run R CMD check on push and pull request.
       * README.md: rewritten.  It was a title and a single line; it now describes
         what the package is for, how to install it, the parts most people want
         (bayesglm, display, standardize/rescale, sim, the plots, matching) with
