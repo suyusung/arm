@@ -8,8 +8,8 @@
 \title{Generic Function to Run \sQuote{mcmcsamp()} in lme4}
 
 \description{
-    The quick function for MCMC sampling for
-    lmer and glmer objects and convert to Bugs objects for easy display. 
+    A shortcut for MCMC sampling from \code{lmer} and \code{glmer} objects,
+    converting the result to a \code{bugs} object for easy display.
 }
 \usage{
 \method{mcsamp}{default}(object, n.chains=3, n.iter=1000, n.burnin=floor(n.iter/2), 
@@ -20,21 +20,21 @@
 }
 
 \arguments{
-  \item{object}{\code{mer} objects from \code{lme4}}
-  \item{n.chains}{number of MCMC chains}
-  \item{n.iter}{number of iteration for each MCMC chain}
-  \item{n.burnin}{number of burnin for each MCMC chain, 
-            Default is \code{n.iter/2}, that is, discarding the
+  \item{object}{\code{merMod} objects from \pkg{lme4}.}
+  \item{n.chains}{number of MCMC chains.}
+  \item{n.iter}{number of iterations for each MCMC chain.}
+  \item{n.burnin}{number of burn-in iterations for each MCMC chain. 
+            The default is \code{n.iter/2}, that is, discarding the
             first half of the simulations.}
   \item{n.thin}{keep every kth draw from each MCMC chain. Must be a positive integer. 
             Default is \code{max(1, floor(n.chains * (n.iter-n.burnin) /
           1000))} which will only thin if there are at least 2000
           simulations.}
-  \item{saveb}{if 'TRUE', causes the values
-          of the random effects in each sample to be saved.}
-  \item{deviance}{compute deviance for \code{mer} objects. Only works 
-          for \code{\link[lme4]{lmer}} object}
-  \item{make.bugs.object}{tranform the output into bugs object, default is TRUE}
+  \item{saveb}{if \code{TRUE}, the values of the random effects in each
+          sample are saved.}
+  \item{deviance}{compute deviance for \code{merMod} objects.  Only works 
+          for \code{\link[lme4]{lmer}} objects.}
+  \item{make.bugs.object}{transform the output into a bugs object; default is \code{TRUE}.}
   \item{\ldots}{further arguments passed to or from other methods.}
 }
 
@@ -47,8 +47,8 @@
 }
 
 \value{
-An object of (S3) class '"bugs"' suitable for use with the
-functions in the "R2WinBUGS" package. 
+An object of S3 class \code{"bugs"}, suitable for use with the
+functions in the \pkg{R2WinBUGS} package. 
 }
 
 \references{Andrew Gelman and Jennifer Hill, 

@@ -32,23 +32,23 @@ model.matrixBayes(object, data = environment(object),
     that main effects come first, followed by the interactions,
     all second-order, all third-order and so on.  Effects of a given
     order are kept in the order specified.}
-  \item{drop.baseline}{Drop the base level of categorical Xs, default is TRUE.}
+  \item{drop.baseline}{Drop the base level of categorical predictors; the default is \code{FALSE}.}
 %  \item{batch}{Not implement yet!}
   \item{\dots}{further arguments passed to or from other methods.}
 }
 \details{
 \code{model.matrixBayes} is adapted from \code{model.matrix} in the \code{stats}
-pacakge and is designed for the use of \code{\link{bayesglm}}.% and \code{bayesglm.hierachical} (not yet implemented!).
-It is designed to keep baseline levels of all categorical varaibles and keep the
-variable names unodered in the output.  The design matrices created by
+package and is designed for the use of \code{\link{bayesglm}}.% and \code{bayesglm.hierachical} (not yet implemented!).
+It is designed to keep baseline levels of all categorical variables and to keep
+the variable names unordered in the output.  The design matrices created by
 \code{model.matrixBayes} are unidentifiable using classical regression methods,
 though; they can be identified using \code{\link{bayesglm}}.% and
 %\code{bayesglm.hierachical}.
 }
 
-\references{Andrew Gelman, Aleks Jakulin, Maria Grazia Pittau and Yu-Sung Su. (2009).
-            \dQuote{A Weakly Informative Default Prior Distribution For
-            Logistic And Other Regression Models.}
+\references{Andrew Gelman, Aleks Jakulin, Maria Grazia Pittau and Yu-Sung Su. (2008).
+            \dQuote{A Weakly Informative Default Prior Distribution for
+            Logistic and Other Regression Models.}
             \emph{The Annals of Applied Statistics} 2 (4): 1360--1383.
             \url{https://sites.stat.columbia.edu/gelman/research/published/priors11.pdf}
 }

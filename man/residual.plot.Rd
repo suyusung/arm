@@ -1,9 +1,9 @@
 \name{residual.plot}
 \alias{residual.plot}
 
-\title{residual plot for the observed values}
+\title{Residual Plot for the Observed Values}
 \description{
-  Plots the residual of observed variable.
+  Plots the residuals of the observed variable against the expected values.
 }
 \usage{
 residual.plot(Expected, Residuals, sigma, main = deparse(substitute(Expected)), 
@@ -20,7 +20,7 @@ residual.plot(Expected, Residuals, sigma, main = deparse(substitute(Expected)),
   \item{col.ctr}{ Color of the line at zero. }
   \item{col.sgm}{ Color of standard error line. }
   \item{cex}{ A numerical value giving the amount by which plotting text
-          and symbols should be magnified relative to the default.  See par for detail. }
+          and symbols should be magnified relative to the default.  See \code{par} for details. }
   \item{gray.scale}{ If \code{TRUE}, makes the plot into black and white.  This option overwrites the color specification.  Default is FALSE. }
   \item{xlab}{ Label for x axis. }
   \item{ylab}{ Label for y axis. }
@@ -28,7 +28,9 @@ residual.plot(Expected, Residuals, sigma, main = deparse(substitute(Expected)),
 }
 
 \value{
-  Plot to visualize pattern of residulal value for the expected value.
+  Called for its side effect: a plot showing the pattern of residuals against
+  the expected values, with a dashed line at zero and dashed lines at plus and
+  minus 2 standard errors.
 }
 
 \author{

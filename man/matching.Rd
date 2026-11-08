@@ -1,10 +1,10 @@
 \name{matching}
 \alias{matching}
 
-\title{Single Nearest Neighborhood Matching}
+\title{Single Nearest Neighbor Matching}
 
 \description{
-Function for processing matching with propensity score 
+Function for matching treatment units to control units using a propensity score.
 }
 
 \usage{
@@ -20,19 +20,28 @@ matching(z, score, replace=FALSE)
       default is \code{FALSE}.} 
 }
 
-\details{Function for matching each treatment unit in turn 
-    the control unit (not previously chosen) with the 
-    closest propensity score }
+\details{The function matches each treatment unit in turn to the control unit
+    (not previously chosen) with the closest propensity score.}
 
 \value{
-The function returns a vector of indices that the corresponding 
-unit is matched to. 0 means matched to nothing.}
+A list with components
+\describe{
+  \item{match.ind}{a vector of indices giving the unit that each unit is
+    matched to; 0 means matched to nothing.}
+  \item{cnts}{the number of times each unit will be used in any subsequent
+    analysis (1 for each treated unit, and, for each control unit, the number
+    of treated units it is matched to).}
+  \item{matches}{for \code{replace = FALSE}, a matrix recording which treated
+    observations were matched to which controls.}
+  \item{pairs}{for \code{replace = TRUE}, an indicator for each pair.}
+}
+}
  
 \references{Andrew Gelman and Jennifer Hill. (2006).
             \emph{Data Analysis Using Regression and Multilevel/Hierarchical Models}.
             Cambridge University Press.}
 
-\author{Jeniffer Hill \email{jh1030@columbia.edu};
+\author{Jennifer Hill \email{jh1030@columbia.edu};
         Yu-Sung Su \email{suyusung@tsinghua.edu.cn}
 }
 

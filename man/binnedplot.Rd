@@ -16,20 +16,20 @@
 
 \arguments{
   \item{x}{The expected values from the logistic regression.}
-  \item{y}{The residuals values from logistic regression (observed values
+  \item{y}{The residual values from logistic regression (observed values
             minus expected values).}
-  \item{nclass}{Number of categories (bins) based on their fitted values in which
-                  the data are divided. Default=NULL and will take the value of nclass
-                  according to the $n$ such that if $n >=100$, 
-                  nclass=floor(sqrt(length(x))); if $10<n<100$, nclass=10;
-                  if $n<10$, nclass=floor(n/2).}
+  \item{nclass}{Number of categories (bins), based on their fitted values, into
+                  which the data are divided.  Default \code{NULL}, in which case
+                  \code{nclass = floor(sqrt(length(x)))} if n >= 100,
+                  \code{nclass = 10} if 10 < n < 100, and
+                  \code{nclass = floor(n/2)} if n < 10.}
   \item{xlab}{a label for the x axis, default is "Expected Values".}
   \item{ylab}{a label for the y axis, default is "Average residual".}       
   \item{main}{a main title for the plot, default is "Binned residual plot". 
     See also \code{title}.}
   \item{cex.pts}{The size of points, default=0.8.}
-  \item{col.pts}{color of points, default is black}
-  \item{col.int}{color of intervals, default is gray}
+  \item{col.pts}{color of points, default is black.}
+  \item{col.int}{color of intervals, default is gray.}
   \item{...}{Graphical parameters to be passed to methods}
 }
 
@@ -42,9 +42,12 @@ on their fitted values, plots the average residual versus the average fitted
 value for each bin.
 }
 \value{
-A plot in which the gray lines indicate plus and minus 2 standard-error
-bounds, within which one would expect about 95\% of the binned residuals to fall,
-if the model were actually true. 
+\code{binnedplot} is called for its side effect: a plot in which the gray lines
+indicate plus and minus 2 standard-error bounds, within which one would expect
+about 95\% of the binned residuals to fall if the model were actually true.
+
+\code{binned.resids} returns a list with components \code{binned}, a matrix of
+bin summaries, and \code{xbreaks}, the breakpoints of the bins.
 }
 \references{ Andrew Gelman and Jennifer Hill, 
              Data Analysis Using Regression and Multilevel/Hierarchical Models, 
@@ -57,7 +60,7 @@ if the model were actually true.
 \note{There is typically some arbitrariness in choosing the number of bins: 
      each bin should contain enough points so that the averaged residuals are not too noisy,
      but it helps to have also many bins so as to see more local patterns in the residuals (see 
-     Gelman and Hill, Data Analysis Using Regression and Multilevel/Hierarchical Models, pag 97).}
+     Gelman and Hill, Data Analysis Using Regression and Multilevel/Hierarchical Models, p. 97).}
 
 \seealso{\code{\link{par}}, \code{\link{plot}}}
 

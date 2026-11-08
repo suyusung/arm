@@ -13,7 +13,7 @@
     \item{educ}{years of schooling.}
     \item{black}{indicator variable for blacks.}
     \item{hisp}{indicator variable for Hispanics.}
-    \item{married}{indicator variable for martial status.}
+    \item{married}{indicator variable for marital status.}
     \item{nodegr}{indicator variable for high school diploma.}
     \item{re74}{real earnings in 1974.}
     \item{re75}{real earnings in 1975.}
@@ -31,19 +31,19 @@
   data.
   }
 \references{
-  Dehejia, Rajeev and Sadek Wahba. 1999.``Causal Effects in
+  Dehejia, Rajeev and Sadek Wahba. 1999.  \dQuote{Causal Effects in
   Non-Experimental Studies: Re-Evaluating the
-  Evaluation of Training Programs.'' \emph{Journal of the American Statistical
-  Association} 94 (448): 1053-1062.
+  Evaluation of Training Programs.} \emph{Journal of the American Statistical
+  Association} 94 (448): 1053--1062.
 
-  LaLonde, Robert. 1986.  ``Evaluating the Econometric Evaluations of
-  Training Programs.''  \emph{American Economic Review} 76:604-620.
+  LaLonde, Robert. 1986.  \dQuote{Evaluating the Econometric Evaluations of
+  Training Programs.}  \emph{American Economic Review} 76: 604--620.
 }
 
-\note{This documentation is adapted from \code{Matching} package.}
+\note{This documentation is adapted from the \code{Matching} package.}
 
 \seealso{\code{\link{matching}},
-        \code{\link[Matching]{GenMatch}}
+        \code{\link[Matching]{GenMatch}},
             \code{\link{balance}}
             }
 

@@ -24,8 +24,8 @@ contr.bayes.ordered (n, scores = 1:n, contrasts = TRUE)
 
 \details{
    These functions are adapted from \code{contr.treatment} and \code{contr.poly}
-   in \code{\link{stats}} package.  The purpose for these functions are to keep
-   the baseline levels of categorical variables and thus to suit the use of 
+   in the \code{stats} package.  Their purpose is to keep the baseline levels
+   of categorical variables, which suits the use of 
    \code{\link{bayesglm}}.
    
    \code{contr.bayes.unordered} is equivalent to \code{contr.treatment} whereas
@@ -41,7 +41,7 @@ contr.bayes.ordered (n, scores = 1:n, contrasts = TRUE)
   \code{\link{contr.helmert}},
   \code{\link{contr.poly}},
   \code{\link{contr.sum}},
-  \code{\link{contr.treatment}};
+  \code{\link{contr.treatment}},
   \code{\link{glm}},
   \code{\link{aov}},
   \code{\link{lm}},

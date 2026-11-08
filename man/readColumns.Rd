@@ -5,14 +5,14 @@
 \title{Function to read data by columns}
 
 \description{
-    A function read data by columns
+    A function to read data by columns.
 }
 \usage{
 read.columns(filename, columns)
 }
 \arguments{
-  \item{filename}{user specified file name including path of the file}
-  \item{columns}{which columns of the data to be read}
+  \item{filename}{user-specified file name, including the path to the file.}
+  \item{columns}{the columns of the data to be read.}
 }
 
 

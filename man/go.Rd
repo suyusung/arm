@@ -9,15 +9,15 @@
 \title{Function to Recall Last Source File}
 
 \description{
-    A function that like \code{source()} but recalls the last source file names by default.
+    A function that is like \code{source()}, but that recalls the last source file names by default.
 }
 \usage{
 go(\dots, add=FALSE, timer=FALSE)
 }
 \arguments{
   \item{\dots}{list of filenames as character strings.}
-  \item{add}{add these names to the current list; if replace, then \code{FALSE}.}
-  \item{timer}{time the execution time of \code{go()}.}
+  \item{add}{add these names to the current list; if \code{FALSE}, replace the list instead.}
+  \item{timer}{time the execution of \code{go()}.}
 }
 
 

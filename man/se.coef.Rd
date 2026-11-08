@@ -24,8 +24,8 @@ se.ranef (object)
 }
 
 \arguments{
-  \item{object}{object of \code{lm}, \code{glm} and \code{merMod} fit}
-  \item{\dots}{other arguments}
+  \item{object}{an object of class \code{lm}, \code{glm} or \code{merMod}.}
+  \item{\dots}{further arguments.}
 }
 \value{
   \code{se.coef} gives lists of standard errors for \code{coef},
@@ -44,7 +44,7 @@ se.ranef (object)
 \seealso{
   \code{\link{display}},
   \code{\link{coef}},
-  \code{\link{sigma.hat}},
+  \code{\link{sigma.hat}}
 }
 
 \references{Andrew Gelman and Jennifer Hill. (2006).

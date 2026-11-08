@@ -6,7 +6,7 @@
 \alias{traceplot,bugs-method}
 
 
-\title{Trace plot of \sQuote{bugs} object}
+\title{Trace Plot of a \sQuote{bugs} Object}
 
 \usage{
 \S4method{traceplot}{bugs}( x, mfrow = c( 1, 1 ), varname = NULL,
@@ -19,7 +19,7 @@
   \item{x}{A bugs object}
   \item{mfrow}{graphical parameter (see \code{par})}
   \item{varname}{vector of variable names to plot}
-  \item{match.head}{ matches the variable names by the beginning of the variable names in bugs object}
+  \item{match.head}{if \code{TRUE}, match the variable names by their beginnings in the bugs object.}
   \item{ask}{logical; if \code{TRUE}, the user is \emph{ask}ed before each plot, see
           \code{par(ask=.)}.}
   \item{col}{graphical parameter (see \code{par})}
@@ -31,11 +31,11 @@
 
 \description{
 Displays a plot of iterations \emph{vs.} sampled values for each variable
-in the chain, with a separate plot per variable.
+in the chains, with a separate plot per variable.
 }
 
 \author{
-  Masanao Yajima \email{yajima@stat.columbia.edu}.
+  Masanao Yajima \email{yajima@stat.columbia.edu};
   Yu-Sung Su \email{suyusung@tsinghua.edu.cn}
 }
 

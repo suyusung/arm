@@ -2,14 +2,14 @@
 \alias{fround}
 \alias{pfround}
 
-\title{Formating the Rounding of Numbers}
+\title{Formatting the Rounding of Numbers}
 
 \description{
     \code{fround} rounds the values in its first argument to the specified
-    number of decimal places with surrounding quotes.
-    
-    \code{pfround} rounds the values in its first argument to the specified
-    number of decimal places without surrounding quotes.
+    number of decimal places and returns them as character strings.
+
+    \code{pfround} does the same, but prints the result without the
+    surrounding quotes that R normally puts around character output.
 
 }
 

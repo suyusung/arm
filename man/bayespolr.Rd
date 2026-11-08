@@ -104,7 +104,7 @@ bayespolr(formula, data, weights, start,  ...,
   \item{maxit}{integer giving the maximal number of IWLS iterations, default is 100. This can also be controlled by \code{control}.}
 
   \item{print.unnormalized.log.posterior}{display the unnormalized log posterior
-    likelihood for bayesglm fit, default=\code{FALSE}}
+    density for the \code{bayespolr} fit; default \code{FALSE}.}
 }
 \details{
 The program is a simple alteration of \code{\link[MASS]{polr}} in
@@ -126,10 +126,12 @@ For a predictor with more than two values, we use prior.scale/(2*sd(x)).
 \value{
 See \code{polr} for details.
 
-\item{prior.mean}{prior means for the cofficients.}
-\item{prior.scale}{prior scales for the cofficients.}
-\item{prior.df}{prior dfs for the cofficients.}
-\item{prior.counts.for.bins}{prior counts for the cutpoints.}
+\describe{
+  \item{prior.mean}{prior means for the coefficients.}
+  \item{prior.scale}{prior scales for the coefficients.}
+  \item{prior.df}{prior degrees of freedom for the coefficients.}
+  \item{prior.counts.for.bins}{prior counts for the cutpoints.}
+}
 }
 
 \author{Andrew Gelman \email{gelman@stat.columbia.edu};
@@ -178,7 +180,7 @@ See \code{polr} for details.
     display (M8)
 
     M9 <- bayespolr (y ~ x,  prior.scale=Inf, prior.df=Inf, prior.counts.for.bins=0)
-    display (M9) # same as M1
+    display (M9) # same as M8
 
     M10 <- bayespolr (y ~ x,  prior.scale=Inf, prior.df=Inf, prior.counts.for.bins=10000)
     display (M10)
@@ -194,7 +196,7 @@ See \code{polr} for details.
     display (M11)
 
     M12 <- bayespolr (y ~ x,  prior.scale=Inf, prior.df=Inf, prior.counts.for.bins=0)
-    display (M12) # same as M1
+    display (M12) # same as M11
 
     M13 <- bayespolr (y ~ x,  prior.scale=Inf, prior.df=Inf, prior.counts.for.bins=1)
     display (M13)

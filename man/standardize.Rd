@@ -15,7 +15,7 @@
      Binary variables are rescaled to have a mean of 0 and a difference of 1
      between their two categories; 
      Non-numeric variables that take on more than two values are unchanged;
-     Variables that take on only one value are unchanged
+     Variables that take on only one value are unchanged.
 
 }
 \usage{
@@ -30,19 +30,19 @@
 }
 
 \arguments{
-  \item{object}{an object of class \code{lm} or \code{glm}}
-  \item{unchanged}{vector of names of parameters to leave unstandardized}
-  \item{standardize.y}{ if TRUE, the outcome variable is standardized also}
-  \item{binary.inputs}{options for standardizing binary variables}
+  \item{object}{an object of class \code{lm}, \code{glm}, \code{merMod} or \code{polr}.}
+  \item{unchanged}{vector of names of parameters to leave unstandardized.}
+  \item{standardize.y}{ if \code{TRUE}, the outcome variable is standardized as well.}
+  \item{binary.inputs}{options for standardizing binary variables; default is \code{center}.
+    See \code{\link{rescale}} for the allowed values.}
 }
 
 \details{
-    "0/1" (rescale so that the lower value is 0 and the upper is 1)
-    "-0.5/0.5" (rescale so that the lower value is -0.5 and upper is 0.5)
-    "center" (rescale so that the mean of the data is 0 and the difference
-              between the two categories is 1)
-    "full" (rescale by subtracting the mean and dividing by 2 sd's)
-    "leave.alone" (do nothing)
+    \code{"0/1"} (rescale so that the lower value is 0 and the upper is 1);
+    \code{"-0.5,0.5"} (rescale so that the lower value is -0.5 and the upper is 0.5);
+    \code{"center"} (rescale so that the mean of the data is 0 and the difference
+              between the two categories is 1);
+    \code{"full"} (rescale by subtracting the mean and dividing by 2 sd's).
 }
 
 \references{Andrew Gelman. (2008).
@@ -51,7 +51,7 @@
     \url{https://sites.stat.columbia.edu/gelman/research/published/standardizing7.pdf}
 }
 
-\author{Andrew Gelman \email{gelman@stat.columbia.edu}
+\author{Andrew Gelman \email{gelman@stat.columbia.edu};
         Yu-Sung Su \email{suyusung@tsinghua.edu.cn}
 }
 

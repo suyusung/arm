@@ -2,10 +2,12 @@
 \alias{invlogit}
 \alias{logit}
 
-\title{Logistic and Inverse logistic functions}
+\title{Logit and Inverse-Logit Functions}
 
 \description{
-  Inverse-logit function, transforms continuous values to the range (0, 1)
+  The inverse-logit (logistic) transformation, which maps continuous values
+  onto the interval (0, 1), and the logit transformation, which maps
+  probabilities back onto the real line.
 }
 \usage{
 logit(x)
@@ -17,13 +19,15 @@ invlogit(x)
 }
 
 \details{
-        The Inverse-logit function defined as: 
-        \eqn{logit^-1(x) = e^x/(1+e^x)} transforms continuous values to the range (0, 1),
-        which is necessary, since probabilities must be between 0 and 1 and maps 
-        from the linear predictor to the probabilities 
+        The inverse-logit function is defined as
+        \eqn{\mathrm{logit}^{-1}(x) = e^x/(1+e^x)}{logit^-1(x) = e^x/(1+e^x)},
+        which transforms continuous values to the range (0, 1).  This is
+        necessary because probabilities must lie between 0 and 1, and it maps
+        from the linear predictor to the probability scale.
 }
 \value{
-  A vector of estimated probabilities
+  For \code{invlogit}, a vector of probabilities.  For \code{logit}, a vector
+  of log-odds.
 }
 \references{Andrew Gelman and Jennifer Hill. (2006).
             \emph{Data Analysis Using Regression and Multilevel/Hierarchical Models}.
@@ -35,7 +39,6 @@ invlogit(x)
 
 
 \examples{
- data(frisk)
  n <- 100
  x1 <- rnorm (n)
  x2 <- rbinom (n, 1, .5)

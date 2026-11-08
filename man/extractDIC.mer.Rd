@@ -20,7 +20,7 @@ extractDIC(fit,\dots)
 }
 
 \arguments{
-  \item{fit}{fitted \code{merMod} mode, usually the result of a fiiter like \code{merMod}.}
+  \item{fit}{a fitted \code{merMod} model, usually the result of \code{lmer}.}
   \item{\dots}{further arguments (currently unused).}
 }
 

@@ -11,8 +11,8 @@
 
 \title{Generic Function for Making Coefficient Plot}
 \description{
- Functions that plot the coefficients plus and minus 1 and 2 sd 
- from a lm, glm, bugs, and polr fits.
+ Functions that plot the coefficients plus and minus 1 and 2 standard
+ deviations from \code{lm}, \code{glm}, \code{bugs} and \code{polr} fits.
 }
 \usage{
 coefplot(object,\dots)
@@ -42,10 +42,11 @@ coefplot(object,\dots)
 }
 
 \arguments{
-  \item{object}{fitted objects-lm, glm, bugs and polr, or a vector of coefficients.}
+  \item{object}{fitted objects of class \code{lm}, \code{glm}, \code{bugs} or \code{polr},
+    or a vector of coefficients.}
   \item{...}{further arguments passed to or from other methods.}
   \item{coefs}{a vector of coefficients.}
-  \item{sds}{a vector of sds of coefficients.}
+  \item{sds}{a vector of standard deviations of the coefficients.}
   \item{CI}{confidence interval, default is 2, which will plot plus and minus 2 sds or
     95\% CI. If CI=1, plot plus and minus 1 sds or 50\% CI instead.}
   \item{lower.conf.bounds}{lower bounds of confidence intervals.}
@@ -58,7 +59,7 @@ coefplot(object,\dots)
     axis instead.}
   \item{v.axis}{default is TRUE, which shows the bottom axis--axis(1).}
   \item{h.axis}{default is TRUE, which shows the left axis--axis(2).}
-  \item{cex.var}{The fontsize of the varible names, default=0.8.}
+  \item{cex.var}{The font size of the variable names, default=0.8.}
   \item{cex.pts}{The size of data points, default=0.9.}
   \item{col.pts}{color of points and segments, default is black.}
   \item{pch.pts}{symbol of points, default is solid dot.}
@@ -74,7 +75,7 @@ coefplot(object,\dots)
           the four sides of the plot. The default is \code{c(1,3,5.1,2)}.}
   \item{plot}{default is TRUE, plot the estimates.}
   \item{add}{if add=TRUE, plot over the existing plot. default is FALSE.}
-  \item{offset}{add extra spaces to separate from the existing dots. default is 0.1.}
+  \item{offset}{add extra spaces to separate from the existing points; default is 0.1.}
 %  \item{lower.bound}{default is -Inf.}
   \item{var.idx}{the index of the variables of a bugs object, default
         is NULL which will plot all the variables.}
@@ -87,8 +88,9 @@ coefplot(object,\dots)
 }
 
 \value{
-   Plot of the coefficients from a bugs, lm or glm fit. You can add the intercept, 
-   the variable names and the display the result of the fitted model. 
+   Called for its side effect: a plot of the coefficients from a \code{bugs},
+   \code{lm}, \code{glm} or \code{polr} fit.  You can add the intercept and the
+   variable names, or display the result of the fitted model.
 }
 
 \references{Andrew Gelman and Jennifer Hill, 

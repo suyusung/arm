@@ -3,7 +3,7 @@
 
 \title{Correlation Plot}
 \description{
-Function for making a correlation plot starting from a data matrix
+Function for making a correlation plot from a data matrix.
 }
 
 \usage{
@@ -21,29 +21,29 @@ corrplot (data, varnames=NULL, cutpts=NULL,
         default=TRUE.}
   \item{cutpts}{a vector of cutting points for color legend, default is NULL. 
         The function will decide the cutting points if cutpts is not assigned.}
-  \item{details}{show more than one digits correlaton values. Default 
-              is TRUE.  FALSE is suggested to get readable output.}
-  \item{n.col.legend}{number of legend for the color thermometer.}
+  \item{details}{show correlation values to more than one digit. Default 
+              is TRUE; FALSE is suggested for readable output.}
+  \item{n.col.legend}{number of entries in the color legend.}
   \item{cex.col}{font size of the color thermometer.}
   \item{cex.var}{font size of the variable names.}
-  \item{digits}{number of digits shown in the text of the color theromoeter.}
-  \item{color}{color of the plot, default is FALSE, which uses gray scale.}
+  \item{digits}{number of digits shown in the text of the color thermometer.}
+  \item{color}{if TRUE, use color; the default FALSE uses a gray scale.}
 }
 
 \details{
 The function adapts the R function for 
 Figure 8 in Tian Zheng, Matthew Salganik, and Andrew Gelman, 2006, 
 "How many people do you know in prison?: using overdispersion in count data to estimate social structure in networks", 
-Journal of the American Statistical Association, Vol.101, N0. 474: p.409-23.
+Journal of the American Statistical Association, Vol. 101, No. 474: pp. 409--423.
 }
 
 \value{
-  A correlation plot. 
+  Called for its side effect: a correlation plot is drawn on the current device.
 }
 
 \references{ Tian Zheng, Matthew Salganik, and Andrew Gelman, 2006, 
 "How many people do you know in prison?: using overdispersion in count data to estimate social structure in networks", 
-Journal of the American Statistical Association, Vol.101, N0. 474: p.409-23}
+Journal of the American Statistical Association, Vol. 101, No. 474: pp. 409--423.}
 
 \author{Tian Zheng \email{tzheng@stat.columbia.edu};
         Yu-Sung Su \email{suyusung@tsinghua.edu.cn}

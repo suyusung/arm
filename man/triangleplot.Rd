@@ -18,13 +18,13 @@ triangleplot (x, y=NULL, cutpts=NULL, details=TRUE,
   \item{y}{a vector of names that corresponds to each element of the square matrix x.}
   \item{cutpts}{a vector of cutting points for color legend, default is \code{NULL}. 
         The function will decide the cutting points if cutpts is not assigned.}
-  \item{details}{show more than one digits correlaton values. Default 
-              is \code{TRUE}. \code{FALSE} is suggested to get readable output.}
-  \item{n.col.legend}{number of legend for the color thermometer}
+  \item{details}{show correlation values to more than one digit. Default
+              is \code{TRUE}; \code{FALSE} is suggested for readable output.}
+  \item{n.col.legend}{number of entries in the color legend.}
   \item{cex.col}{font size of the color thermometer.}
   \item{cex.var}{font size of the variable names.}
-  \item{digits}{number of digits shown in the text of the color theromoeter.}
-  \item{color}{color of the plot, default is FALSE, which uses gray scale.}
+  \item{digits}{number of digits shown in the text of the color thermometer.}
+  \item{color}{if \code{TRUE}, use color; the default \code{FALSE} uses a gray scale.}
 }
 
 \details{

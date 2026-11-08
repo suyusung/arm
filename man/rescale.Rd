@@ -12,15 +12,18 @@ rescale(x, binary.inputs="center")
 }
 
 \arguments{
-  \item{x}{a vector}
-  \item{binary.inputs}{options for standardizing binary variables, default is \code{center}; \code{0/1} maps the two values
-    to 0 and 1; \code{-0.5,0.5} maps the two values to -0.5 and 0.5; \code{center} substracts the mean; and 
-    \code{full} substracts the mean and divids by 2 sd.  The first two are invariant to how the binary variable is
-    coded, so a variable coded 1/2 gives the same answer as one coded 0/1.  Any other value is an error.}
+  \item{x}{a numeric vector or a factor.}
+  \item{binary.inputs}{options for standardizing binary variables: \code{center} (the
+    default) subtracts the mean; \code{0/1} maps the two values to 0 and 1;
+    \code{-0.5,0.5} maps the two values to -0.5 and 0.5; and \code{full}
+    subtracts the mean and divides by 2 sd.  The \code{0/1} and \code{-0.5,0.5}
+    options are invariant to how the binary variable is coded, so a variable
+    coded 1/2 gives the same answer as one coded 0/1.  Any other value is an
+    error.}
 }
 
 \value{
- the standardized vector
+ The standardized vector.
 }
 
 \references{Andrew Gelman. (2008). 

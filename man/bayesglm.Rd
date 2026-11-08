@@ -13,7 +13,7 @@
 %\alias{show,bayesglm.h-method}
 \alias{predict.bayesglm}
 
-\title{Bayesian generalized linear models.}
+\title{Bayesian Generalized Linear Models}
 
 \description{Bayesian functions for generalized linear modeling
         with independent normal, t, or Cauchy prior distribution
@@ -132,7 +132,7 @@ bayesglm.fit (x, y, weights = rep(1, nobs),
     (not counting the intercept, if any). If it is a scalar, it is
     expanded to the length of this vector.}
 
-  \item{prior.scale}{prior scale for the coefficients: default is NULL; if is NULL, for
+  \item{prior.scale}{prior scale for the coefficients: default is NULL; if it is NULL, for
     a logit model, prior.scale is 2.5; for a probit model, prior scale is 2.5*1.6.
     Can be a vector of length equal to the number of predictors
     (not counting the intercept, if any). If it is a scalar, it is
@@ -155,12 +155,12 @@ bayesglm.fit (x, y, weights = rep(1, nobs),
 
   \item{min.prior.scale}{Minimum prior scale for the coefficients: default is 1e-12.}
 
-  \item{scaled}{scaled=TRUE, the scales for the prior distributions of the coefficients
-  are determined as follows: For a predictor with only one value,
-  we just use prior.scale. For a predictor with two values,
-  we use prior.scale/range(x). For a predictor with more than two values,
-  we use prior.scale/(2*sd(x)). If the response is Gaussian, prior.scale is also
-  multiplied by 2 * sd(y). Default is TRUE}
+  \item{scaled}{if \code{scaled = TRUE}, the scales for the prior distributions of
+  the coefficients are determined as follows: for a predictor with only one value,
+  we just use prior.scale; for a predictor with two values,
+  we use prior.scale/range(x); for a predictor with more than two values,
+  we use prior.scale/(2*sd(x)).  If the response is Gaussian, prior.scale is also
+  multiplied by 2 * sd(y).  Default is \code{TRUE}.}
 
   \item{keep.order}{a logical value indicating whether the terms should
     keep their positions. If \code{FALSE} the terms are reordered so
@@ -168,11 +168,11 @@ bayesglm.fit (x, y, weights = rep(1, nobs),
     all second-order, all third-order and so on.  Effects of a given
     order are kept in the order specified. Default is TRUE.}
 
-  \item{drop.baseline}{Drop the base level of categorical x's, default is TRUE.}
+  \item{drop.baseline}{Drop the base level of categorical predictors; the default is \code{TRUE}.}
 
   \item{maxit}{integer giving the maximal number of IWLS iterations, default is 100. This can also be controlled by \code{control}.}
-  \item{print.unnormalized.log.posterior}{display the unnormalized log posterior likelihood for bayesglm, default=FALSE}
-  \item{Warning}{default is TRUE, which will show the error messages of not convergence and separation.}
+  \item{print.unnormalized.log.posterior}{display the unnormalized log posterior density for \code{bayesglm}; default \code{FALSE}.}
+  \item{Warning}{default is \code{TRUE}, which shows the error messages for non-convergence and separation.}
   \item{\dots}{further arguments passed to or from other methods.}
 }
 \details{
@@ -195,21 +195,22 @@ options (e.g., \code{offsets}, \code{contrasts},
 \code{deviance} for the null model) all work.
 
 The new arguments here are: \code{prior.mean}, \code{prior.scale},
-\code{prior.scale.for.intercept}, \code{prior.df}, \code{prior.df.for.intercept}and
+\code{prior.scale.for.intercept}, \code{prior.df}, \code{prior.df.for.intercept} and
 \code{scaled}.
 }
 
-\value{See \code{\link[stats]{glm}} for details.
-
-\item{prior.mean}{prior means for the coefficients and the intercept.}
-\item{prior.scale}{prior scales for the coefficients}
-\item{prior.df}{prior dfs for the coefficients.}
-\item{prior.scale.for.intercept}{prior scale for the intercept}
-\item{prior.df.for.intercept}{prior df for the intercept}
-
+\value{
+See \code{\link[stats]{glm}} for details.  In addition, the object has components
+\describe{
+  \item{prior.mean}{prior means for the coefficients and the intercept.}
+  \item{prior.scale}{prior scales for the coefficients.}
+  \item{prior.df}{prior degrees of freedom for the coefficients.}
+  \item{prior.scale.for.intercept}{prior scale for the intercept.}
+  \item{prior.df.for.intercept}{prior degrees of freedom for the intercept.}
+}
 }
 
-\references{Andrew Gelman, Aleks Jakulin, Maria Grazia Pittau and Yu-Sung Su. (2009).
+\references{Andrew Gelman, Aleks Jakulin, Maria Grazia Pittau and Yu-Sung Su. (2008).
             \dQuote{A Weakly Informative Default Prior Distribution For
             Logistic And Other Regression Models.}
             \emph{The Annals of Applied Statistics} 2 (4): 1360--1383.

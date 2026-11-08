@@ -28,10 +28,10 @@ display (object, ...)
 
 \arguments{
   \item{object}{The output of a call to lm, glm, mer, polr, svyglm or related regressions 
-    function with n data points and k predictors.}
+    functions with n data points and k predictors.}
   \item{...}{further arguments passed to or from other methods.}
   \item{digits}{number of significant digits to display.}
-  \item{detail}{defaul is \code{FALSE}, if \code{TRUE}, display p-values or z-values}
+  \item{detail}{default is \code{FALSE}; if \code{TRUE}, display p-values or z-values.}
   }
 
 \details{This generic function gives a
@@ -57,7 +57,7 @@ display (object, ...)
         Maria Grazia Pittau \email{grazia@stat.columbia.edu}
         }
         
-\note{Output are the model, the regression coefficients and standard errors,
+\note{The output is the model, the regression coefficients and standard errors,
  and the residual sd and R-squared (for a linear model),
  or the null deviance and residual deviance (for a generalized linear model).
 }

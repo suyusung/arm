@@ -5,7 +5,7 @@
 \title{Multiple Comparison Plot}
 
 \description{
-  Plots significant difference of simulated array.
+  Plots significant differences among a simulated array of coefficients.
 }
 
 \usage{
@@ -25,12 +25,12 @@ multicomp.plot(object, alpha = 0.05, main = "Multiple Comparison Plot",
   \item{label}{Labels for simulated parameters.}
   \item{shortlabel}{Short labels to put into the plot.}
   \item{show.pvalue}{Default is FALSE, if set to TRUE replaces short label
-      with Bayesian p value. }
-  \item{label.as.shortlabel}{Default is FALSE, if set to TRUE takes first 2 character
-      of label and use it as short label.}
+      with a Bayesian p-value. }
+  \item{label.as.shortlabel}{Default is FALSE; if set to TRUE, takes the first 2
+      characters of the label and uses them as the short label.}
   \item{label.on.which.axis}{default is the 3rd (top) axis.}
   \item{col.low}{Color of significantly low coefficients.}
-  \item{col.same}{Color of not significant difference.}
+  \item{col.same}{Color of coefficients that are not significantly different.}
   \item{col.high}{Color of significantly high coefficients.}
   \item{vertical.line}{Default is TRUE, if set to FALSE does not draw vertical line.}
   \item{horizontal.line}{Default is FALSE, if set to TRUE draws horizontal line.}
@@ -43,8 +43,11 @@ multicomp.plot(object, alpha = 0.05, main = "Multiple Comparison Plot",
 }
 
 \value{
-  \item{pvalue}{Array of Bayesian p value.}
-  \item{significant}{Array of significance.}
+  A list with components
+  \describe{
+    \item{pvalue}{array of Bayesian p-values.}
+    \item{significant}{array of significance flags.}
+  }
 }
 
 \references{Andrew Gelman and Jennifer Hill. (2006).
@@ -72,7 +75,7 @@ simulation.array <- data.frame(coef1=rnorm(100,10,2), coef2=rnorm(100,5,2),
 short.lab <- c("c01", "c02", "c03", "c04", "c05")
 multicomp.plot(simulation.array[,1:4], label.as.shortlabel=TRUE)
 
-# wraper for multicomp.plot
+# wrapper for multicomp.plot
 mcplot(simulation.array, shortlabel = short.lab)
 
 # example 2
