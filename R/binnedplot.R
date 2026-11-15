@@ -60,7 +60,7 @@ binned.resids <- function (x, y, nclass=floor(sqrt(length(x)))){
     breaks <- unique(breaks)
     nclass <- length(breaks) - 1
     output <- NULL
-    xbreaks <- NULL
+    xbreaks <- breaks
     x.binned <- as.numeric (cut (x, breaks))
 
     for (i in 1:nclass){
