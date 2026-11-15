@@ -47,3 +47,8 @@ stopifnot("keep.order = FALSE: predict(se.fit = TRUE)$fit differs from the linea
                   unname(b2$linear.predictors)))
 stopifnot("keep.order = FALSE should reorder terms by degree" =
             identical(attr(terms(b2), "term.labels"), c("x", "x:z")))
+
+## a formula given as a character string still works, as it does for glm()
+b3 <- bayesglm("y ~ x:z + x", binomial, d)
+stopifnot("a character formula should give the same fit as the formula" =
+            identical(coef(b3), coef(b)))
