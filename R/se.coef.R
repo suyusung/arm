@@ -74,12 +74,7 @@ setMethod("se.coef", signature(object = "merMod"),
     
     for (m in 1:n.groupings){
       vars.m <- attr (coef[[m]], "postVar")
-      K <- dim(vars.m)[1]
-      J <- dim(vars.m)[3]
-      se.bygroup[[m]] <- array (NA, c(J,K))
-      for (j in 1:J){
-        se.bygroup[[m]][j,] <- sqrt(diag(as.matrix(vars.m[,,j])))
-      }
+      se.bygroup[[m]] <- postVar.sd (vars.m)
 #      se.bygroup[[m]] <- se.bygroup[[m]]*sc
       names.full <- dimnames (coef[[m]])
       dimnames (se.bygroup[[m]]) <- list (names.full[[1]],
@@ -108,14 +103,21 @@ se.ranef <- function (object){
     n.groupings<- length( se.bygroup )
     for( m in 1:n.groupings ) {
         vars.m <- attr( se.bygroup[[m]], "postVar" )
-        K <- dim(vars.m)[1]
-        J <- dim(vars.m)[3]
         names.full <- dimnames(se.bygroup[[m]])
-        se.bygroup[[m]] <- array(NA, c(J, K))
-        for (j in 1:J) {
-            se.bygroup[[m]][j, ] <- sqrt(diag(as.matrix(vars.m[, , j])))
-        }       
+        se.bygroup[[m]] <- postVar.sd(vars.m)
         dimnames(se.bygroup[[m]]) <- list(names.full[[1]], names.full[[2]])
     }
     return(se.bygroup)
+}
+
+# J x K matrix of conditional sds from a "postVar" attribute.  When one
+# grouping factor has several terms, e.g. (1|g) + (0+x|g), lme4 returns a
+# list of K_t x K_t x J arrays, one per term, in the column order of ranef().
+postVar.sd <- function (vars.m){
+    if (!is.list(vars.m)) vars.m <- list(vars.m)
+    do.call(cbind, lapply(vars.m, function(v) {
+        J <- dim(v)[3]
+        matrix(apply(v, 3, function(vj) sqrt(diag(as.matrix(vj)))),
+               nrow = J, byrow = TRUE)
+    }))
 }
