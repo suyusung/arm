@@ -246,18 +246,20 @@ function (formula, data, weights, start, ..., subset, na.action,
     beta <- res$par[seq_len(pc)]
     theta <- res$par[pc + 1:q]
     zeta <- cumsum(c(theta[1], exp(theta[-1])))
-    deviance <- 2 * res$value
     niter <- c(f.evals = res$counts[1], g.evals = res$counts[2])
     names(zeta) <- paste(lev[-length(lev)], lev[-1], sep = "|")
     if (pc > 0) {
         names(beta) <- colnames(x)
-        eta <- drop(x %*% beta)
+        eta <- offset + drop(x %*% beta)
     }
     else {
-        eta <- rep(0, n)
+        eta <- offset
     }
     cumpr <- matrix(pfun(matrix(zeta, n, q, byrow = TRUE) - eta), , q)
     fitted <- t(apply(cumpr, 1, function(x) diff(c(0, x, 1))))
+    # deviance of the data alone: res$value also holds the log prior and
+    # the prior pseudo-counts added to the data before optim()
+    deviance <- -2 * sum(wt * log(fitted[cbind(seq_len(n), y)]))
     dimnames(fitted) <- list(row.names(m), lev)
     fit <- list(coefficients = beta, zeta = zeta, deviance = deviance,
         fitted.values = fitted, lev = lev, terms = Terms, df.residual = sum(wt) -
