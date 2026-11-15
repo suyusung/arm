@@ -364,8 +364,9 @@ bayesglm.fit <- function (x, y, weights = rep(1, nobs), start = NULL, etastart =
         mu <- linkinv(eta <- eta + offset)
         dev <- sum(dev.resids(y, mu, weights))
         if (!(family$family %in% c("poisson", "binomial"))) {
-            mse.resid <- mean((w * (z - x %*% coefs.hat))^2)
-            mse.uncertainty <- mean(rowSums(( x %*% V.coefs ) * x)) * dispersion # faster
+            x.good <- x[good, , drop = FALSE]
+            mse.resid <- mean((w * (z - x.good %*% coefs.hat))^2)
+            mse.uncertainty <- mean(rowSums(( x.good %*% V.coefs ) * x.good)) * dispersion # faster
             dispersion <- mse.resid + mse.uncertainty
         }
         if (control$trace)
