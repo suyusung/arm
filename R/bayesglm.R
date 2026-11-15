@@ -201,7 +201,6 @@ bayesglm.fit <- function (x, y, weights = rep(1, nobs), start = NULL, etastart =
         if(family$family=="gaussian"){
             prior.scale <- prior.scale*2*sd(y)
         }
-        prior.scale.0 <- prior.scale
         if(nvars==0&intercept){ # this is need to reajust nvars when intercept is TRUE
             nvars <- 1
         }else if(intercept){
@@ -353,9 +352,6 @@ bayesglm.fit <- function (x, y, weights = rep(1, nobs), start = NULL, etastart =
         start[fit$qr$pivot] <- coefs.hat <- fit$coefficients
         fit$qr$qr <- as.matrix (fit$qr$qr)
         V.coefs <- chol2inv(fit$qr$qr[1:NCOL(x.star), 1:NCOL(x.star), drop = FALSE])
-        if (family$family == "gaussian" & scaled){
-            prior.scale <- prior.scale.0
-        }
         prior.sd <- ifelse(prior.df == Inf, prior.scale,
             sqrt(((coefs.hat - prior.mean)^2 + diag(V.coefs)*dispersion +
             prior.df * prior.scale^2)/(1 + prior.df)))
