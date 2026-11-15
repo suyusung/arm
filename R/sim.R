@@ -46,6 +46,8 @@ setMethod("sim", signature(object = "glm"),
 #      beta[s,] <- MASS::mvrnorm (1, beta.hat, V.beta)
 #    }
     beta <- MASS::mvrnorm (n.sims, beta.hat, V.beta)
+    # mvrnorm() drops to a bare vector when n.sims == 1
+    beta <- matrix (beta, nrow = n.sims, dimnames = list (NULL, rownames(beta.hat)))
     # Added by Masanao
     beta2 <- array (0, c(n.sims,length(coefficients(object))))
     dimnames(beta2) <- list (NULL, names(coefficients(object)))
@@ -87,8 +89,8 @@ setMethod("sim", signature(object = "polr"),
     
     # Create new "sim.polr" object with coefficients and thresholds separated
     ans <- new("sim.polr",
-               coef = parameters[, 1:k, drop = FALSE],
-               zeta = parameters[, (k + 1):ncol(parameters), drop = FALSE]
+               coef = parameters[, seq_len(k), drop = FALSE],
+               zeta = parameters[, k + seq_along(zeta), drop = FALSE]
     )
     
     return(ans)
