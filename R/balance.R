@@ -113,7 +113,7 @@ print.balance <- function(x, ..., combined=FALSE, digits= 2)
   else{
    cat("Balance Statistics\n")
    cat("--\n")
-   print(round(cbind(x$diff.means.raw,x$diff.matched.raw)[,c(4,9,5,10)],
+   print(round(cbind(x$diff.means.raw,x$diff.means.matched)[,c(4,9,5,10)],
      digits=digits), na.print="--")
 }
 }
