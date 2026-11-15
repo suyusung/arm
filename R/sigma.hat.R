@@ -13,13 +13,7 @@ sigma.hat.glm <- function(object,...){
                   else{
                     object$dispersion
                   }
-    if (object$family$family == "gaussian") {
-      sigma <- sqrt(dispersion)
-    }
-    else {
-      sigma <- summary(object, correlation = TRUE)$sigma
-      #sigma <- sqrt(deviance(object)/df.residual(object))
-    }
+    sigma <- sqrt(dispersion)
     return(sigma)
 }
 
