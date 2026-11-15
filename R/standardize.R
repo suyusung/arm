@@ -1,4 +1,4 @@
-standardize.default <- function(call, unchanged = NULL,
+standardize.default <- function(call, n.obs, unchanged = NULL,
                                  standardize.y = FALSE, binary.inputs = "center") {
   form <- eval(call$formula, envir = parent.frame())
   varnames <- all.vars(form)
@@ -57,7 +57,9 @@ standardize.default <- function(call, unchanged = NULL,
       assign(varnames.new[i], new_var)  # Assign to global environment
       newvars <- cbind(newvars, new_var)  # Combine new variables for output
     }
-    assign(as.character(call$data), cbind(get(as.character(call$data)), newvars))
+    if (!is.null(newvars)) {
+      assign(as.character(call$data), cbind(get(as.character(call$data)), newvars))
+    }
   }
   
   # Now call the regression with the new variables
@@ -74,7 +76,34 @@ standardize.default <- function(call, unchanged = NULL,
   formula <- gsub("factor(c.", "factor(", formula, fixed = TRUE)
   call.new$formula <- as.formula(formula)
   
-  return(eval(call.new))
+  out <- eval(call.new)
+  # A transformation of a rescaled variable can be undefined where the
+  # original was not -- log(z.x) is NaN for every z.x < 0 -- and the refit
+  # then silently drops those rows.
+  if (stats::nobs(out) != n.obs) {
+    inside <- intersect(varnames[transformed.variables], vars.in.calls(form))
+    v <- if (length(inside) > 0) paste(inside, collapse = ", ") else "the inputs"
+    stop(sprintf(paste("standardize() fitted %d of the %d observations of the original model:",
+                       "rescaling %s, which appears inside a function call in the formula,",
+                       "made that call undefined for some rows (e.g. log() of a negative value).",
+                       "Put %s in 'unchanged' to leave it as it is (log(x) stays log(x)),",
+                       "or add the transformed variable to the data and use that in the formula."),
+                 stats::nobs(out), n.obs, v, v), call. = FALSE)
+  }
+  return(out)
+}
+
+
+# Variables that appear inside a function call in a formula, other than
+# formula operators and factor().
+vars.in.calls <- function(e) {
+  if (!is.call(e)) return(character(0))
+  fn <- deparse(e[[1]])
+  if (fn %in% c("factor", "as.factor")) return(character(0))
+  if (!fn %in% c("~", "+", "-", "*", "/", ":", "^", "%in%", "(", "|", "||")) {
+    return(all.vars(e))
+  }
+  unique(unlist(lapply(as.list(e)[-1], vars.in.calls)))
 }
 
 
@@ -82,7 +111,8 @@ setMethod("standardize", signature(object = "lm"),
   function(object, unchanged = NULL, 
            standardize.y = FALSE, binary.inputs = "center") {
     call <- object$call
-    out <- standardize.default(call = call, unchanged = unchanged, 
+    out <- standardize.default(call = call, n.obs = stats::nobs(object),
+                               unchanged = unchanged, 
                                standardize.y = standardize.y, 
                                binary.inputs = binary.inputs)
     return(out)
@@ -93,7 +123,8 @@ setMethod("standardize", signature(object = "glm"),
   function(object, unchanged = NULL, 
            standardize.y = FALSE, binary.inputs = "center") {
     call <- object$call
-    out <- standardize.default(call = call, unchanged = unchanged, 
+    out <- standardize.default(call = call, n.obs = stats::nobs(object),
+                               unchanged = unchanged, 
                                standardize.y = standardize.y, 
                                binary.inputs = binary.inputs)
     return(out)
@@ -104,7 +135,8 @@ setMethod("standardize", signature(object = "polr"),
   function(object, unchanged = NULL, 
            standardize.y = FALSE, binary.inputs = "center") {
     call <- object$call
-    out <- standardize.default(call = call, unchanged = unchanged, 
+    out <- standardize.default(call = call, n.obs = stats::nobs(object),
+                               unchanged = unchanged, 
                                standardize.y = standardize.y, 
                                binary.inputs = binary.inputs)
     return(out)
@@ -115,7 +147,8 @@ setMethod("standardize", signature(object = "merMod"),
   function(object, unchanged = NULL, 
            standardize.y = FALSE, binary.inputs = "center") {
     call <- object@call  # For merMod, use @ instead of $
-    out <- standardize.default(call = call, unchanged = unchanged, 
+    out <- standardize.default(call = call, n.obs = stats::nobs(object),
+                               unchanged = unchanged, 
                                standardize.y = standardize.y, 
                                binary.inputs = binary.inputs)
     return(out)

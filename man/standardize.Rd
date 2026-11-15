@@ -16,6 +16,9 @@
      between their two categories; 
      Non-numeric variables that take on more than two values are unchanged;
      Variables that take on only one value are unchanged.
+     If rescaling a variable makes a function of it in the formula undefined
+     for some rows, such as \code{log(x)} for a centred \code{x}, standardize
+     stops with an error; list that variable in \code{unchanged} to keep it as it is.
 
 }
 \usage{
