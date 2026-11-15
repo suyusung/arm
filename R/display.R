@@ -257,11 +257,12 @@ setMethod("display", signature(object = "merMod"),
     is_REML <- isREML(object)
     llik <- logLik(object, REML=is_REML)
     out$AIC <- AIC(llik)
-    out$deviance <- deviance(refitML(object))     # Dbar
+    out$deviance <- deviance(refitML(object))
     out$n <- getME(object, "devcomp")$dims["n"]
-    Dhat <- -2*(llik) # Dhat
-    pD <- out$deviance - Dhat              # pD
-    out$DIC <- out$deviance + pD               # DIC=Dbar+pD=Dhat+2pD
+    # fixed seed so the printed DIC is reproducible; the caller's RNG is restored
+    dic <- dic.merMod(object, n.sims = 1000, seed = 1)
+    out$DIC <- dic[["DIC"]]
+    out$pD <- dic[["pD"]]
     cat("---\n")
     cat(sprintf("number of obs: %d, groups: ", out$n))
     cat(paste(paste(names(out$ngrps), out$ngrps, sep = ", "), collapse = "; "))
