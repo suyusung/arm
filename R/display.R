@@ -252,7 +252,7 @@ setMethod("display", signature(object = "merMod"),
     out$se <- coefs[,"coef.se"]
     cat("\nError terms:\n")
     vc <- as.matrix.VarCorr (VarCorr (object), useScale=useScale, digits=digits)
-    print (vc[,c(1:2,4:ncol(vc))], quote=FALSE)
+    print (vc[,c(1:2,4:ncol(vc)), drop=FALSE], quote=FALSE)
     out$ngrps <- lapply(object@flist, function(x) length(levels(x)))
     is_REML <- isREML(object)
     llik <- logLik(object, REML=is_REML)
