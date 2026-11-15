@@ -20,20 +20,29 @@ matching(z, score, replace=FALSE)
       default is \code{FALSE}.} 
 }
 
-\details{The function matches each treatment unit in turn to the control unit
-    (not previously chosen) with the closest propensity score.}
+\details{The function matches each treatment unit to the control unit with the
+    closest propensity score.  With \code{replace = FALSE} the treatment units are
+    matched in turn and a control unit already chosen is not available again.
+    With \code{replace = TRUE} a control unit can be matched to several treatment
+    units, and ties are broken at random, so set a seed to reproduce the result.}
 
 \value{
 A list with components
 \describe{
-  \item{match.ind}{a vector of indices giving the unit that each unit is
-    matched to; 0 means matched to nothing.}
+  \item{match.ind}{for \code{replace = FALSE}, a vector of length
+    \code{length(z)} giving the index of the unit that each unit is matched to;
+    0 means matched to nothing.  For \code{replace = TRUE}, a vector of length
+    \code{2 * sum(z)}: the indices of the treated units followed by the indices
+    of the control units they are matched to, in the same order.}
   \item{cnts}{the number of times each unit will be used in any subsequent
     analysis (1 for each treated unit, and, for each control unit, the number
     of treated units it is matched to).}
-  \item{matches}{for \code{replace = FALSE}, a matrix recording which treated
-    observations were matched to which controls.}
-  \item{pairs}{for \code{replace = TRUE}, an indicator for each pair.}
+  \item{matches}{for \code{replace = TRUE} only, a 0/1 matrix with one row per
+    treated unit and one column per control unit (each in the order they appear
+    in \code{z}), recording which control each treated unit was matched to.}
+  \item{pairs}{for \code{replace = FALSE} only, a vector of length
+    \code{length(z)} giving the pair number of each matched unit; \code{NA}
+    for unmatched control units.}
 }
 }
  

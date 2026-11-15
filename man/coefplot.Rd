@@ -47,8 +47,11 @@ coefplot(object,\dots)
   \item{...}{further arguments passed to or from other methods.}
   \item{coefs}{a vector of coefficients.}
   \item{sds}{a vector of standard deviations of the coefficients.}
-  \item{CI}{confidence interval, default is 2, which will plot plus and minus 2 sds or
-    95\% CI. If CI=1, plot plus and minus 1 sds or 50\% CI instead.}
+  \item{CI}{confidence interval, default is 2, which will plot plus and minus 2 sds
+    (about a 95\% interval) over plus and minus 1 sd. If CI=1, plot plus and
+    minus 1 sd (about a 68\% interval) only. For a \code{bugs} object the default
+    is 1, which plots the 50\% interval (25\% to 75\% quantiles); CI=2 adds the
+    95\% interval (2.5\% to 97.5\% quantiles).}
   \item{lower.conf.bounds}{lower bounds of confidence intervals.}
   \item{upper.conf.bounds}{upper bounds of confidence intervals.}
   \item{varnames}{a vector of variable names, default is NULL, which will use
@@ -57,8 +60,9 @@ coefplot(object,\dots)
   \item{vertical}{orientation of the plot, default is TRUE which will plot
     variable names in the 2nd axis. If FALSE, plot variable names in the first
     axis instead.}
-  \item{v.axis}{default is TRUE, which shows the bottom axis--axis(1).}
-  \item{h.axis}{default is TRUE, which shows the left axis--axis(2).}
+  \item{v.axis}{default is TRUE, which shows the vertical (left) axis--axis(2).}
+  \item{h.axis}{default is TRUE, which shows the horizontal axis: the top axis,
+    axis(3), if \code{vertical=TRUE}, or the bottom axis, axis(1), otherwise.}
   \item{cex.var}{The font size of the variable names, default=0.8.}
   \item{cex.pts}{The size of data points, default=0.9.}
   \item{col.pts}{color of points and segments, default is black.}
