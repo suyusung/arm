@@ -26,8 +26,9 @@ multicomp.plot(object, alpha = 0.05, main = "Multiple Comparison Plot",
   \item{shortlabel}{Short labels to put into the plot.}
   \item{show.pvalue}{Default is FALSE, if set to TRUE replaces short label
       with a Bayesian p-value. }
-  \item{label.as.shortlabel}{Default is FALSE; if set to TRUE, takes the first 2
-      characters of the label and uses them as the short label.}
+  \item{label.as.shortlabel}{Default is FALSE; if set to TRUE, a short label is
+      created with \code{abbreviate(label, minlength = 2)}, which shortens each
+      label to the fewest characters that keep it unique.}
   \item{label.on.which.axis}{default is the 3rd (top) axis.}
   \item{col.low}{Color of significantly low coefficients.}
   \item{col.same}{Color of coefficients that are not significantly different.}
