@@ -31,7 +31,6 @@ bayesglm <- function (formula, family = gaussian, data, weights, subset,
         "etastart", "mustart", "offset"), names(mf), 0L)
     mf <- mf[c(1L, m)]
     mf$drop.unused.levels <- drop.unused.levels
-    mf$formula <- terms(as.formula(formula), data = data, keep.order = keep.order)
     mf[[1L]] <- quote(stats::model.frame)
     mf <- eval(mf, parent.frame())
     if (identical(method, "model.frame")){
@@ -49,6 +48,15 @@ bayesglm <- function (formula, family = gaussian, data, weights, subset,
     control$maxit <- maxit
 
     mt <- attr(mf, "terms")
+    # The design matrix below is built with keep.order, so the terms stored
+    # in the fit must be in that order too: everything that rebuilds the
+    # matrix from them -- model.matrix(fit), predict(se.fit = TRUE),
+    # predict(type = "terms") -- otherwise pairs columns with the wrong
+    # coefficients.  Building the *model frame* from a terms object instead
+    # breaks formulas whose terms are transformations, e.g. poly(psi, ...):
+    # the frame carries the evaluated column, not the variable the terms
+    # refer to, and re-deriving the frame from it fails.
+    mt <- terms(as.formula(formula), data = data, keep.order = keep.order)
     Y <- model.response(mf, "any")
     if (length(dim(Y)) == 1L) {
         nm <- rownames(Y)
@@ -709,7 +717,8 @@ predictLM <- function (object, newdata, se.fit = FALSE, scale = NULL, df = Inf,
     }
     if (type == "terms") {
         if (!mmDone) {
-            mm <- model.matrixBayes(object, keep.order = keep.order, drop.baseline = drop.baseline)
+            mm <- model.matrixBayes(object$terms, data = model.frame(object),
+                keep.order = keep.order, drop.baseline = drop.baseline)
             mmDone <- TRUE
         }
         aa <- attr(mm, "assign")
@@ -722,7 +731,8 @@ predictLM <- function (object, newdata, se.fit = FALSE, scale = NULL, df = Inf,
         if (hasintercept) {
             asgn$"(Intercept)" <- NULL
             if (!mmDone) {
-                mm <- model.matrixBayes(object, keep.order = keep.order, drop.baseline = drop.baseline)
+                mm <- model.matrixBayes(object$terms, data = model.frame(object),
+                    keep.order = keep.order, drop.baseline = drop.baseline)
                 mmDone <- TRUE
             }
             avx <- colMeans(mm)

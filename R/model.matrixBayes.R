@@ -8,13 +8,12 @@ model.matrixBayes <- function(object, data = environment(object),
          }else{
             terms.formula(object, data = data, keep.order=keep.order)
          }
-    # only when object carries one: a fitted model has no "intercept"
-    # attribute (the terms do), and copying NULL from it wiped the intercept,
-    # so model.matrixBayes(<fit>) lost the intercept column (predict(...,
-    # type = "terms", newdata =) then failed in predictLM).
-    if (!is.null(attr(object, "intercept"))) {
-        attr(t, "intercept") <- attr(object, "intercept")
-    }
+    ## NB: a *formula* carries no "intercept" attribute, so this strips the
+    ## intercept from the matrix -- model.matrixBayes(y ~ x, data) has no
+    ## intercept column, and FindIt depends on that (it prepends one itself).
+    ## A terms object does carry one, so the fitted-model paths must pass
+    ## terms rather than the fit; see predictLM().
+    attr(t, "intercept") <- attr(object, "intercept")
     if (is.null(attr(data, "terms"))){
       data <- model.frame(object, data, xlev=xlev)
     }else {
@@ -22,9 +21,13 @@ model.matrixBayes <- function(object, data = environment(object),
         if (anyNA(reorder)) {
             stop( "model frame and formula mismatch in model.matrix()" )
         }
-        if(!identical(reorder, seq_len(ncol(data)))) {
-            data <- data[,reorder, drop = FALSE]
-        }
+        # `data` is already a model frame: pass it on whole.  Subsetting it
+        # here (which the code used to do) drops its "terms" attribute and
+        # the columns the terms refer to, so model.matrix.default rebuilds
+        # the frame from what is left and fails for terms that are
+        # transformations of the data, e.g. poly(psi, ...) or log(x);
+        # model.matrix.default matches the variables to the columns by name
+        # anyway, so the reordering is not needed.
     }
     int <- attr(t, "response")
     if(length(data)) {      # otherwise no rhs terms, so skip all this
