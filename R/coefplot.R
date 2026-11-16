@@ -41,10 +41,12 @@ coefplot.default <- function(coefs, sds, CI=2,
         est1[,2] <- upper.conf.bounds
         CI <- 1
       }
+      if(!missing(lower.conf.bounds) || !missing(upper.conf.bounds)){
+        coefs.l <- est1[,1]
+        coefs.h <- est1[,2]
+      }
 
     }else{
-      #coefs.h <- upper.conf.bounds
-      #coefs.l <- lower.conf.bounds
       est1 <- cbind(coefs, coefs)
       if(!missing(lower.conf.bounds)){
         est1[,1] <- lower.conf.bounds
@@ -54,6 +56,8 @@ coefplot.default <- function(coefs, sds, CI=2,
         est1[,2] <- upper.conf.bounds
         CI <- 1
       }
+      coefs.l <- est1[,1]
+      coefs.h <- est1[,2]
     }
     old.par <- par(no.readonly=TRUE)
     #on.exit(par(old.par))  
