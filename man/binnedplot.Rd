@@ -22,7 +22,7 @@
                   which the data are divided.  Default \code{NULL}, in which case
                   \code{nclass = floor(sqrt(length(x)))} if n >= 100,
                   \code{nclass = 10} if 10 < n < 100, and
-                  \code{nclass = floor(n/2)} if n < 10.}
+                  \code{nclass = floor(n/2)} if n <= 10.}
   \item{xlab}{a label for the x axis, default is "Expected Values".}
   \item{ylab}{a label for the y axis, default is "Average residual".}       
   \item{main}{a main title for the plot, default is "Binned residual plot". 

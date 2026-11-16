@@ -202,12 +202,18 @@ The new arguments here are: \code{prior.mean}, \code{prior.scale},
 \value{
 See \code{\link[stats]{glm}} for details.  In addition, the object has components
 \describe{
-  \item{prior.mean}{prior means for the coefficients and the intercept.}
-  \item{prior.scale}{prior scales for the coefficients.}
-  \item{prior.df}{prior degrees of freedom for the coefficients.}
-  \item{prior.scale.for.intercept}{prior scale for the intercept.}
-  \item{prior.df.for.intercept}{prior degrees of freedom for the intercept.}
+  \item{prior.mean}{prior means, one per column of the model matrix; if the
+    model has an intercept, its prior mean is the first element.}
+  \item{prior.scale}{prior scales, in the same order as \code{prior.mean}, so
+    the prior scale for the intercept is the first element.}
+  \item{prior.df}{prior degrees of freedom, in the same order as
+    \code{prior.mean}.}
+  \item{prior.sd}{the prior standard deviations from the last iteration of the
+    fitting algorithm, in the same order as \code{prior.mean}.}
 }
+There are no separate \code{prior.scale.for.intercept} or
+\code{prior.df.for.intercept} components; those values are the first elements
+of \code{prior.scale} and \code{prior.df}.
 }
 
 \references{Andrew Gelman, Aleks Jakulin, Maria Grazia Pittau and Yu-Sung Su. (2008).

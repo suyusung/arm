@@ -8,8 +8,11 @@
 \title{Generic Function to Run \sQuote{mcmcsamp()} in lme4}
 
 \description{
-    A shortcut for MCMC sampling from \code{lmer} and \code{glmer} objects,
-    converting the result to a \code{bugs} object for easy display.
+    \code{mcsamp} used to be a shortcut for MCMC sampling from \code{lmer} and
+    \code{glmer} objects, converting the result to a \code{bugs} object for easy
+    display.  It relied on \code{mcmcsamp}, which is no longer available in
+    \pkg{lme4}, so it now only prints a message suggesting \code{\link{sim}}
+    instead.
 }
 \usage{
 \method{mcsamp}{default}(object, n.chains=3, n.iter=1000, n.burnin=floor(n.iter/2), 
@@ -39,16 +42,16 @@
 }
 
 \details{
-     This function generates a sample from the posterior
+     This function used to generate a sample from the posterior
      distribution of the parameters of a fitted model using Markov
-     Chain Monte Carlo methods. It automatically simulates multiple 
-     sequences and allows convergence to be monitored. The function relies on
-     \code{mcmcsamp} in \code{lme4}.
+     Chain Monte Carlo methods, simulating multiple sequences so that
+     convergence could be monitored.  It relied on \code{mcmcsamp} in
+     \pkg{lme4}, which has been removed.  The arguments are still accepted
+     but are ignored; use \code{\link{sim}} to get simulated estimates.
 }
 
 \value{
-An object of S3 class \code{"bugs"}, suitable for use with the
-functions in the \pkg{R2WinBUGS} package. 
+\code{NULL}, invisibly.  The function is called for the message it prints.
 }
 
 \references{Andrew Gelman and Jennifer Hill, 

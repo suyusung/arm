@@ -15,9 +15,12 @@ contr.bayes.ordered (n, scores = 1:n, contrasts = TRUE)
 
 \arguments{
   \item{n}{a vector of levels for a factor, or the number of levels.}
-  \item{base}{an integer specifying which group is considered the baseline
-          group. Ignored if \code{contrasts} is \code{FALSE}.}
-  \item{contrasts}{a logical indicating whether contrasts should be computed.}
+  \item{base}{an integer between 1 and the number of levels.  It is only
+          checked to be in range (when \code{contrasts} is \code{TRUE}); it does
+          not change the result, since no level is dropped.}
+  \item{contrasts}{a logical.  For \code{contr.bayes.unordered} it does not
+          change the result.  For \code{contr.bayes.ordered}, \code{FALSE}
+          replaces the first (constant) column by a column of ones.}
   \item{scores}{the set of values over which orthogonal polynomials are to be
           computed.}
 }
@@ -28,8 +31,11 @@ contr.bayes.ordered (n, scores = 1:n, contrasts = TRUE)
    of categorical variables, which suits the use of 
    \code{\link{bayesglm}}.
    
-   \code{contr.bayes.unordered} is equivalent to \code{contr.treatment} whereas
-   \code{contr.bayes.ordered} is equivalent to \code{contr.poly}.
+   \code{contr.bayes.unordered} returns the n by n identity matrix: one
+   indicator column for every level, where \code{contr.treatment} drops the
+   column of the baseline level.  \code{contr.bayes.ordered} returns n
+   orthonormal polynomial columns: a constant column named \code{"^0"} followed
+   by the n - 1 columns of \code{contr.poly}.
    
 }
 
