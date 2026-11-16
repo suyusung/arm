@@ -5,25 +5,61 @@ extractDIC <- function(fit,...){
 }
 
 
-extractDIC.merMod <- function(fit,...){
-        #REML <- fit@dims["REML"]
-#        llik <- logLik(fit, REML)
-#        dev <- fit@deviance["ML"]
-#        n <- fit@dims["n"]
-#        Dhat <- -2 * (llik)
-#        pD <- dev - Dhat
-#        DIC <- dev + pD[[1]]
-#        names(DIC) <- "DIC"
-#        return(DIC)      
-        is_REML <- isREML(fit)
-        llik <- logLik(fit, REML=is_REML)
-        dev <- deviance(refitML(fit))
-        n <-  getME(fit, "devcomp")$dims["n"]
-        Dhat <- -2 * (llik)
-        pD <- dev - Dhat
-        DIC <- dev + pD[[1]]
+extractDIC.merMod <- function(fit, n.sims = 1000, ...){
+        r <- dic.merMod(fit, n.sims)
+        DIC <- r[["DIC"]]
         names(DIC) <- "DIC"
+        attr(DIC, "pD") <- r[["pD"]]
         return(DIC)
+}
+
+
+# Conditional DIC as BUGS computes it, from sim() draws of the fixed
+# effects, random effects and sigma, with the variance parameters held at
+# their estimates.  D = -2 log p(y | beta, b, sigma), pD = mean of D over
+# the draws minus D at the posterior means, and DIC = D(means) + 2 pD.
+# A non-NULL seed is used for the draws and the caller's RNG state is
+# restored afterwards, so display() does not move the user's stream.
+dic.merMod <- function(fit, n.sims, seed = NULL){
+    if (!is.null(seed)) {
+        genv <- globalenv()
+        if (exists(".Random.seed", envir = genv, inherits = FALSE)) {
+            old.seed <- get(".Random.seed", envir = genv, inherits = FALSE)
+            on.exit(assign(".Random.seed", old.seed, envir = genv))
+        } else {
+            on.exit(rm(".Random.seed", envir = genv))
+        }
+        set.seed(seed)
+    }
+    is.glmm <- getME(fit, "devcomp")$dims[["GLMM"]] != 0L
+    fam <- family(fit)
+    if (is.glmm && !(fam$family %in% c("binomial", "poisson"))) {
+        warning("DIC is computed only for lmer fits and binomial or poisson glmer fits")
+        return(c(DIC = NA_real_, pD = NA_real_))
+    }
+    y <- fit@resp$y
+    w <- fit@resp$weights
+    D <- function(mu, sigma){
+        if (is.glmm) {
+            # for binomial and poisson, family$aic() is -2 * log-likelihood
+            apply(mu, 2, function(m) fam$aic(y, fit@resp$n, m, w, NA))
+        } else {
+            sd <- outer(1 / sqrt(w), sigma)
+            -2 * colSums(matrix(dnorm(y, mu, sd, log = TRUE), nrow = length(y)))
+        }
+    }
+    s <- sim(fit, n.sims)
+    s.mean <- new("sim.merMod",
+                  fixef = matrix(colMeans(s@fixef), 1,
+                                 dimnames = list(NULL, colnames(s@fixef))),
+                  ranef = lapply(s@ranef, function(a)
+                      array(apply(a, c(2, 3), mean), c(1, dim(a)[2:3]),
+                            c(list(NULL), dimnames(a)[2:3]))),
+                  sigma = mean(s@sigma))
+    Dbar <- mean(D(fitted(s, fit), s@sigma))
+    Dhat <- D(fitted(s.mean, fit), s.mean@sigma)
+    pD <- Dbar - Dhat
+    return(c(DIC = Dhat + 2 * pD, pD = pD))
 }
 
 

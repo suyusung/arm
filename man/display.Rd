@@ -41,6 +41,10 @@ display (object, ...)
     number of predictors, residual standard deviation, and R-squared.
     Note: R-squared is automatically displayed to 2 digits, and deviances are
     automatically displayed to 1 digit, no matter what.
+    For mer objects, DIC is computed as in \code{\link{extractDIC}} from
+    1000 \code{\link{sim}} draws made with a fixed seed, so the printed
+    value is reproducible; the random number stream of the session is
+    restored afterwards.
 }
 
 \value{Coefficients
