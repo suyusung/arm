@@ -5,7 +5,8 @@
 binnedplot <- function(x, y, nclass=NULL,
     xlab="Expected Values", ylab="Average residual",
     main="Binned residual plot",
-    cex.pts=0.8, col.pts=1, col.int="gray", ...)
+    cex.pts=0.8, col.pts=1, col.int="gray",
+    se = c("model", "empirical"), ...)
 {
 
     n <- length(x)
@@ -21,7 +22,7 @@ binnedplot <- function(x, y, nclass=NULL,
         }
     }
 
-    aa <- data.frame(binned.resids (x, y, nclass)$binned)
+    aa <- data.frame(binned.resids (x, y, nclass, se = se)$binned)
     plot(range(aa$xbar), range(aa$ybar, aa$X2se, -aa$X2se, na.rm=TRUE),
         xlab=xlab, ylab=ylab, type="n", main=main, ...)
     abline (0,0, lty=2)
@@ -30,7 +31,17 @@ binnedplot <- function(x, y, nclass=NULL,
     points (aa$xbar, aa$ybar, pch=19, cex=cex.pts, col=col.pts)
 }
 
-binned.resids <- function (x, y, nclass=floor(sqrt(length(x)))){
+binned.resids <- function (x, y, nclass=floor(sqrt(length(x))),
+    se = c("model", "empirical")){
+
+    se <- match.arg(se)
+    if (se == "model" && (any(x < 0) || any(x > 1))) {
+        warning("the model-based band (se = \"model\") is 2*sqrt(p*(1-p)/n) with p the", 
+                "bin's mean expected value, so it assumes x is a probability and y the", 
+                "response residual (y - p).  x outside [0, 1] gives a meaningless band:", 
+                "use predict(..., type = \"response\") and resid(..., type = \"response\"),", 
+                "or se = \"empirical\".", call. = FALSE)
+    }
 
     breaks.index <- floor(length(x)*(1:(nclass-1))/nclass)
     if(any(breaks.index==0)) nclass <- 1
@@ -69,10 +80,16 @@ binned.resids <- function (x, y, nclass=floor(sqrt(length(x)))){
         xbar <- mean(x[items])
         ybar <- mean(y[items])
         n <- length(items)
-        #p <- xbar
-        #sdev <- sd(y[items])
+        # Gelman & Hill (2007), section 5.6: the standard error of a binned
+        # residual is sqrt(p*(1-p)/n) with p the bin's mean expected value.
+        # The empirical sd of the residuals is not that: in a bin where every
+        # outcome is 0 the residuals are all -p, so their sd is ~0 and the band
+        # collapses (issue #53).  The empirical one is kept as an option.
         sdev <- if(length(y[items]) > 1) sd(y[items]) else 0
-        output <- rbind (output, c(xbar, ybar, n, x.range, 2*sdev/sqrt(n)))
+        se.empirical <- 2*sdev/sqrt(n)
+        se.model <- 2*sqrt(xbar*(1 - xbar)/n)
+        output <- rbind (output, c(xbar, ybar, n, x.range,
+            if (se == "model") se.model else se.empirical))
 
     }
 

@@ -11,7 +11,8 @@
  binnedplot(x ,y, nclass=NULL, 
     xlab="Expected Values", ylab="Average residual", 
     main="Binned residual plot", 
-    cex.pts=0.8, col.pts=1, col.int="gray", ...)
+    cex.pts=0.8, col.pts=1, col.int="gray", 
+    se = c("model", "empirical"), ...)
 }
 
 \arguments{
@@ -30,6 +31,11 @@
   \item{cex.pts}{The size of points, default=0.8.}
   \item{col.pts}{color of points, default is black.}
   \item{col.int}{color of intervals, default is gray.}
+  \item{se}{which standard error the plotted bounds use.  \code{"model"},
+    the default, uses \code{2*sqrt(p*(1-p)/n)} with \code{p} the bin's mean
+    expected value, as in Gelman and Hill (2007, section 5.6);
+    \code{"empirical"} uses the empirical standard deviation of the residuals
+    in the bin, as earlier versions of the package used.  See Details.}
   \item{...}{Graphical parameters to be passed to methods}
 }
 
@@ -40,11 +46,28 @@ As a result, plots of raw residuals from logistic regression are generally not u
 The binned residuals plot instead, after dividing the data into categories (bins) based
 on their fitted values, plots the average residual versus the average fitted
 value for each bin.
+
+The bounds drawn by \code{binnedplot} are, by default, the model-based ones of
+Gelman and Hill (2007, section 5.6), \code{2*sqrt(p*(1-p)/n)}, where \code{p} is
+the bin's mean expected value and \code{n} the number of observations in the bin.
+That formula assumes \code{x} is on the probability scale and that \code{y} is the
+response residual \code{y - p}, so call it with \code{predict(fit, type =
+"response")} and \code{resid(fit, type = "response")}; on the link scale, or with
+deviance residuals, the bounds mean nothing (\code{binned.resids} warns when
+\code{x} falls outside \code{[0, 1]}).
+
+With \code{se = "empirical"} the bounds use the empirical standard deviation of
+the residuals in the bin, \code{2*sd(y)/sqrt(n)}, as earlier versions always did.
+It is unreliable when bins hold few events: in a bin where every outcome is 0 the
+residuals are all \code{-p}, so their sd is near zero and the band collapses onto
+the axis, and a bin with a single event gives a band that is far too wide.
 }
 \value{
 \code{binnedplot} is called for its side effect: a plot in which the gray lines
 indicate plus and minus 2 standard-error bounds, within which one would expect
 about 95\% of the binned residuals to fall if the model were actually true.
+By default the standard error is the model-based \code{sqrt(p*(1-p)/n)}; see
+Details, and the \code{se} argument for the empirical alternative.
 
 \code{binned.resids} returns a list with components \code{binned}, a matrix of
 bin summaries, and \code{xbreaks}, the breakpoints of the bins.
@@ -70,9 +93,10 @@ old.par <- par(no.readonly = TRUE)
  attach(lalonde)
  fit <- glm(treat ~ re74 + re75 + educ + black + hisp + married 
                + nodegr + u74 + u75, family=binomial(link="logit"))
- x <- predict(fit)
- y <- resid(fit)
- binnedplot(x,y)
+ x <- predict(fit, type = "response")
+ y <- resid(fit, type = "response")
+ binnedplot(x, y)
+ binnedplot(x, y, se = "empirical")   # the empirical bounds
 par(old.par)
 }
 \keyword{dplot}
