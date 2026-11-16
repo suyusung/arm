@@ -28,9 +28,9 @@ Jouni Kerman \email{jouni@kerman.com} \email{kerman@stat.columbia.edu}
 
 
 \examples{
-    go('myprog')            # will run source('myprog.r')
-    go()                    # will run source('myprog.r') again
-    go('somelib',add=TRUE)  # will run source('myprog.r') and source('somelib.r')
+    go('myprog')            # will run source('myprog.R')
+    go()                    # will run source('myprog.R') again
+    go('somelib',add=TRUE)  # will run source('myprog.R') and source('somelib.R')
     go('myprog','somelib')  # same as above
     go('mytest')            # will run source('mytest') only
     go()                    # runs source('mytest') again
