@@ -186,7 +186,7 @@ function (formula, data, weights, start, ..., subset, na.action,
     J <- NCOL(x)
 
     # SU: if no x's, no priors for coefs  2008.2.9
-    if (xint>1) {
+    if (pc > 0) {
       if (length(prior.mean) == 1)
         prior.mean <- rep(prior.mean, J)
       if (length(prior.scale) == 1) {
