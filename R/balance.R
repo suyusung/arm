@@ -155,6 +155,7 @@ plot.balance <- function(x, longcovnames=NULL, which.covs="mixed",
         idx <- 1:K
         main="Absolute Difference in Means"
         covnames = covnames[x$binary==TRUE]
+        if (!is.null(longcovnames)) longcovnames = longcovnames[x$binary==TRUE]
     }
     #if plotting just continuous use the standardized difference
     if(which.covs == "cont"){
@@ -164,6 +165,7 @@ plot.balance <- function(x, longcovnames=NULL, which.covs="mixed",
         idx <- 1:K
         main="Absolute Standardized Difference in Means"
         covnames = covnames[x$binary==FALSE]
+        if (!is.null(longcovnames)) longcovnames = longcovnames[x$binary==FALSE]
     }
     cat(pts,"\n")
     # tune the graphic console
