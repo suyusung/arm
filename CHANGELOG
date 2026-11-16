@@ -17,8 +17,9 @@
       * R/bayesglm: the stored terms are built with keep.order, so predict(se.fit =
         TRUE) and type = "terms" pair columns with the right coefficients (pull
         request #44).
-      * R/bayesglm: the gaussian dispersion update uses only rows with positive
-        weight, so a zero weight equals dropping the row (pull request #42).
+      * R/bayesglm: the dispersion update for families other than binomial and
+        poisson uses only rows with positive weight; with scaled = FALSE a zero
+        weight equals dropping the row (pull request #42).
       * R/bayesglm: an offset combined with a vector prior no longer errors in the
         null-deviance refit (pull request #43).
       * R/bayesglm: control = list(maxit = ) is honoured when maxit is not given
@@ -58,8 +59,8 @@
       * man: coefplot, binnedplot, matching, contrasts.bayes, mcsamp and bayesglm
         corrected where they disagreed with the code (pull request #34).
       * DESCRIPTION: URL lists the GitHub repository (pull request #28).
-      * tests: a regression test for each item above, each checked to fail on the
-        code it guards.
+      * tests: a regression test for each code change above (all except #28 and
+        #34), each checked to fail on the code it guards.
 
 2026-11-07 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
       * DESCRIPTION: (Version, Date): 1.15-4
