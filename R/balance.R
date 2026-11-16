@@ -66,12 +66,13 @@ balance <- function (rawdata, treat, matched, estimand="ATT")
   #
   for (i in 1:K) {
     wts0 <- matched[treat==0]
+    wts1 <- matched[treat==1]
     # separate means by group
-    diff.means.matched[i, 1] <- mean(rawdata[treat == 1, i])
+    diff.means.matched[i, 1] <- weighted.mean(rawdata[treat==1, i],w=wts1)
     diff.means.matched[i, 2] <- weighted.mean(rawdata[treat==0, i],w=wts0)
     # separate variances by group == only used as input to calculations below
     # these overwrite the variance above
-    var.t[i] <- var(rawdata[treat == 1, i])
+    var.t[i] <- as.numeric(stats::cov.wt(rawdata[treat == 1, i, drop = FALSE], wt = wts1)$cov)
     var.c[i] <- as.numeric(stats::cov.wt(rawdata[treat == 0, i, drop = FALSE], wt = wts0)$cov)
     # difference in means
     diff.means.matched[i, 3] <- diff.means.matched[i, 1] - diff.means.matched[i, 2]
