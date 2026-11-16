@@ -13,6 +13,13 @@
 ## =====================================================================
 
 library(arm)
+
+## survey is a Suggests, and R CMD check runs tests with the user library
+## hidden: skip rather than fail where it is not installed.
+if (!requireNamespace("survey", quietly = TRUE)) {
+    cat("survey not installed: skipping the display(svyglm) test\n")
+    quit(save = "no", status = 0)
+}
 library(survey)
 
 data(api)
