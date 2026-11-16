@@ -30,13 +30,9 @@ triangleplot <- function (x, y = NULL, cutpts = NULL, details = TRUE, n.col.lege
                 z.breaks <- seq(min(z.plot, na.rm = T), max(z.plot,
                   na.rm = T), length = n.col.legend + 1)
             }
-            for (i in 1:4) {
-                n1 <- length(unique(round(z.breaks, digits = digits)))
-                n2 <- length(z.breaks)
-                ifelse((n1 != n2), digits <- digits + 1, digits <- digits)
-            }
-            if (digits > 3) {
-                stop("Too many digits! Try to adjust n.col.legend to get better presentation!")
+            while (digits < 15 && length(unique(round(z.breaks,
+                digits = digits))) != length(z.breaks)) {
+                digits <- digits + 1
             }
         }
         else {
