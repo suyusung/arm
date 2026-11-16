@@ -54,6 +54,21 @@
         than "the first 2 characters".
       * tests/: 23 new regression-test files, one per finding above; each fails on
         the previous master with its own message.
+      * R/bayesglm, R/model.matrixBayes: a formula whose term is a transformation
+        of a variable -- poly(psi, ...), log(x) -- no longer fails with "object
+        'psi' not found" when the fit also has weights.  model.matrixBayes() used
+        to subset the model frame it was handed, which drops the frame's terms
+        attribute and the columns the terms refer to (a frame holds the evaluated
+        poly() column, not psi).  Found by the reverse-dependency check of 1.15-4:
+        qgcomp's bayes path failed on it.
+      * R/model.matrixBayes, R/bayesglm: model.matrixBayes(formula, data) still
+        returns no intercept column -- a formula carries no intercept attribute to
+        copy -- because FindIt prepends its own intercept and broke when that
+        changed.  predict(type = "terms", newdata = ) is fixed in its caller
+        instead, which now builds the contributions from the fit's terms and model
+        frame.
+      * tests/: two more regression-test files for those, and a test for the
+        shape model.matrixBayes(formula, data) returns.
 
 2026-11-15 Gaurav Sood     (correctness audit; index in issue #54)
       * R/bayespolr: scaled = TRUE now rescales the prior as documented
