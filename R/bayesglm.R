@@ -39,6 +39,9 @@ bayesglm <- function (formula, family = gaussian, data, weights, subset,
     if (!is.character(method) && !is.function(method)){
         stop("invalid 'method' argument")
     }
+    if (missing(maxit) && !is.null(control$maxit)) {
+        maxit <- control$maxit
+    }
     if (identical(method, "glm.fit")){
         control <- do.call("glm.control", control)
     }
