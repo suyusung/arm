@@ -31,6 +31,7 @@ bayesglm <- function (formula, family = gaussian, data, weights, subset,
         "etastart", "mustart", "offset"), names(mf), 0L)
     mf <- mf[c(1L, m)]
     mf$drop.unused.levels <- drop.unused.levels
+    mf$formula <- terms(as.formula(formula), data = data, keep.order = keep.order)
     mf[[1L]] <- quote(stats::model.frame)
     mf <- eval(mf, parent.frame())
     if (identical(method, "model.frame")){
