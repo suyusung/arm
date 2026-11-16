@@ -3,7 +3,7 @@
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/arm)](https://CRAN.R-project.org/package=arm)
 [![R-CMD-check](https://github.com/suyusung/arm/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/suyusung/arm/actions/workflows/R-CMD-check.yaml)
-[![License: GPL (>= 3)](https://img.shields.io/badge/license-GPL--3.0--or--later-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
+[![License: GPL (>= 2)](https://img.shields.io/badge/license-GPL--2.0--or--later-blue.svg)](https://www.gnu.org/licenses/gpl-2.0.en.html)
 <!-- badges: end -->
 
 R functions to accompany *Data Analysis Using Regression and
@@ -131,4 +131,4 @@ Each has a help page: `?display`, `?coefplot`, `?sim`.
 
 ## License
 
-GPL (>= 3).
+GPL (>= 2), as in every published release of the package.
