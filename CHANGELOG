@@ -1,3 +1,58 @@
+2026-11-16 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
+      * R/binnedplot, man/binnedplot: the plus and minus 2 SE band is the
+        model-based 2*sqrt(p*(1-p)/n) of Gelman and Hill (2007, section 5.6) by
+        default; se = "empirical" keeps the old band, which collapsed in
+        low-probability bins because it used the sd of the residuals in the bin.
+        The help example moves to the response scale (issue #53).
+      * R/bayesglm: the Warning argument is read at last.  It was accepted,
+        passed down and documented as controlling the non-convergence and
+        separation messages, and was ignored.
+      * R/bayesglm: the printed unnormalized log posterior passed the prior mean
+        to dt()'s non-centrality argument, ignored the prior scale and used
+        invlogit() whatever the link, and its log likelihood ignored the binomial
+        totals.  It now uses the scaled-t prior and the family's link, and matches
+        logLik().
+      * R/bayesglm, R/model.matrixBayes: predict(type = "terms", newdata = ) no
+        longer fails with "invalid 'labels'".  model.matrixBayes() copied
+        attr(object, "intercept") onto its terms and a fitted model has none, so
+        it copied NULL and the design matrix came back without an intercept.
+      * R/bayesglm: a rank-deficient fit with a prior too flat to carry weight
+        returns NA coefficients with a warning instead of "object of type 'closure'
+        is not subsettable".
+      * R/bayesglm: a start of the wrong length reports the length it wanted
+        instead of "the condition has length > 1".
+      * R/bayesglm: with scaled = TRUE the prior scales, the augmentation means
+        and the dispersion update are computed with the prior weights, so a weight
+        of 2 now means the same as a duplicated row.
+      * R/bayespolr: start is read as the documented c(coefficients, zeta) instead
+        of in the optimiser's log-gap parameterisation, and a zeta that does not
+        increase is rejected.
+      * R/bayespolr: maxit bounds the optim() run as well as the start-value fit,
+        and the cloglog start values come from a cloglog fit rather than a probit
+        one.
+      * R/sim: sim() dispatches on plm and coxph objects.  sim.plm() no longer
+        multiplied the already-scaled vcov(<plm>) by sigma^2, and sim(lm) keeps
+        aliased coefficients as 0 the way sim(glm) does.
+      * R/balance: the raw sd-ratio column is computed rather than left NA, a
+        matrix without column names no longer errors, and ... reaches the plot
+        when plot = TRUE.
+      * R/display: the unreachable .Call("mer_sigma") branch is gone, and an
+        intercept-only lmer keeps its "(Intercept)" coefficient name.
+      * R/rescale: a constant is centred instead of returning NaN.
+      * R/dwish: coerces W, not S.
+      * R/go, man/go.Rd: document the .R extension the function appends.
+      * R/coefplot: any CI draws coefficients plus and minus CI sds, not just
+        plus and minus 1 sd; the help page says so.
+      * R/discrete.histogram: handles a single distinct value, a factor with an
+        unused level, and ylab = passed through the dots.
+      * R/triangleplot: the legend digit search no longer stops with "Too many
+        digits!" on close-together correlations.
+      * R/traceplot: labels the kept draws "kept iteration".
+      * man/multicomp.plot.Rd: documents abbreviate(label, minlength = 2) rather
+        than "the first 2 characters".
+      * tests/: 23 new regression-test files, one per finding above; each fails on
+        the previous master with its own message.
+
 2026-11-15 Gaurav Sood     (correctness audit; index in issue #54)
       * R/bayespolr: scaled = TRUE now rescales the prior as documented
         (prior.scale/range(x) for a two-valued predictor, prior.scale/(2*sd(x))
