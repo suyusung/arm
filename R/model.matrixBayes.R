@@ -8,7 +8,13 @@ model.matrixBayes <- function(object, data = environment(object),
          }else{
             terms.formula(object, data = data, keep.order=keep.order)
          }
-    attr(t, "intercept") <- attr(object, "intercept")
+    # only when object carries one: a fitted model has no "intercept"
+    # attribute (the terms do), and copying NULL from it wiped the intercept,
+    # so model.matrixBayes(<fit>) lost the intercept column (predict(...,
+    # type = "terms", newdata =) then failed in predictLM).
+    if (!is.null(attr(object, "intercept"))) {
+        attr(t, "intercept") <- attr(object, "intercept")
+    }
     if (is.null(attr(data, "terms"))){
       data <- model.frame(object, data, xlev=xlev)
     }else {

@@ -143,7 +143,7 @@ function (formula, data, weights, start, ..., subset, na.action,
                 min.prior.scale = min.prior.scale,
                 scaled = scaled,
                 control = glm.control(maxit=maxit), print.unnormalized.log.posterior = print.unnormalized.log.posterior),
-            cloglog = bayesglm.fit(X, y1, wt, family = binomial("probit"),
+            cloglog = bayesglm.fit(X, y1, wt, family = binomial("cloglog"),
                 offset = offset, intercept = TRUE, prior.mean = prior.mean,
                 prior.scale = prior.scale, prior.df = prior.df,
                 prior.mean.for.intercept = 0, prior.scale.for.intercept = 10,
@@ -182,6 +182,18 @@ function (formula, data, weights, start, ..., subset, na.action,
     }
     else if (length(start) != pc + q)
         stop("'start' is not of the correct length")
+    else {
+        # a user's start is c(coefficients, zeta), as documented; the
+        # optimiser works in c(coefficients, theta), where the cutpoints
+        # are zeta = cumsum(c(theta[1], exp(theta[-1]))).  Reading a
+        # zeta as a theta silently fitted a different model.
+        zeta.start <- start[pc + seq_len(q)]
+        if (any(diff(zeta.start) <= 0)) {
+            stop("'start': zeta must be strictly increasing")
+        }
+        start <- c(start[seq_len(pc)], zeta.start[1],
+            log(diff(zeta.start)))
+    }
 
     J <- NCOL(x)
 
@@ -233,7 +245,15 @@ function (formula, data, weights, start, ..., subset, na.action,
     wt <- c (wt.0, prior.counts.for.bins)
     offset <- c (offset, rep(0,q+1))
 # Fit the model as before
-    res <- optim(start, fmin, gmin, method = "BFGS", hessian = Hess, ...)
+    # maxit is documented as the iteration limit of the fit, but it reached
+    # only the start-value fit above; optim() defaults to 100 of its own
+    # and `...` may carry the caller's control, which wins.
+    dots <- list(...)
+    if (is.null(dots$control)) {
+        dots$control <- list(maxit = maxit)
+    }
+    res <- do.call(optim, c(list(start, fmin, gmin, method = "BFGS",
+        hessian = Hess), dots))
 # Restore the old variables
     y <- y.0
     Y <- Y.0

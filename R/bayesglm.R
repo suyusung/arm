@@ -104,7 +104,7 @@ bayesglm <- function (formula, family = gaussian, data, weights, subset,
             print.unnormalized.log.posterior = print.unnormalized.log.posterior,
             scaled = scaled,
             Warning = Warning)
-        if (!fit2$converged){
+        if (!fit2$converged && Warning) {
             warning("fitting to calculate the null deviance did not converge --
             increase 'maxit'?")
         }
@@ -199,9 +199,23 @@ bayesglm.fit <- function (x, y, weights = rep(1, nobs), start = NULL, etastart =
         prior.df <- c(prior.df.for.intercept, prior.df)
     }
 
+    # A weight of 2 has to mean the same as a duplicated row, and the prior
+    # is scaled by the spread of the predictors and of the response, so those
+    # spreads are computed with the weights.
+    wts <- if (is.null(weights)) rep.int(1, nobs) else weights
+    wtd.sd <- function(v) {
+        keep <- !is.na(v)
+        v <- v[keep]
+        w <- wts[keep]
+        if (length(v) < 2L || sum(w) <= 1) {
+            return(sd(v))
+        }
+        m <- sum(w * v)/sum(w)
+        sqrt(sum(w * (v - m)^2)/(sum(w) - 1))
+    }
     if(scaled){
         if(family$family=="gaussian"){
-            prior.scale <- prior.scale*2*sd(y)
+            prior.scale <- prior.scale*2*wtd.sd(y)
         }
         if(nvars==0&intercept){ # this is need to reajust nvars when intercept is TRUE
             nvars <- 1
@@ -216,7 +230,7 @@ bayesglm.fit <- function (x, y, weights = rep(1, nobs), start = NULL, etastart =
             if(num.categories==2L){
                 x.scale <- max(x.obs) - min(x.obs)
             }else if(num.categories>2){
-                x.scale <- 2*sd(x.obs)
+                x.scale <- 2*wtd.sd(x[,j])
             }
             prior.scale[j] <- prior.scale[j]/x.scale
             if(prior.scale[j] < min.prior.scale){
@@ -277,7 +291,7 @@ bayesglm.fit <- function (x, y, weights = rep(1, nobs), start = NULL, etastart =
             etastart
         }else if (!is.null(start)){
             if (length(start) != nvars){
-                if(start==0&length(start)==1){
+                if (length(start) == 1L && start == 0) {
                     start <- rep(0, nvars)
                     offset + as.vector(ifelse((NCOL(x) == 1L), x*start, x %*% start))
                 }else{
@@ -308,6 +322,11 @@ bayesglm.fit <- function (x, y, weights = rep(1, nobs), start = NULL, etastart =
 #=====================================
     dispersion <- ifelse((family$family %in% c("poisson", "binomial")),  1, var(y)/10000)
     dispersionold <- dispersion
+    # glm's rank-deficiency fix-up below indexes `coef`; when the loop breaks
+    # before assigning it (non-finite coefficients at the first iteration)
+    # that name still resolved to the base function coef().
+    coef <- rep(NA_real_, NCOL(x))
+    dev <- devold
     for (iter in 1L:control$maxit) {
         good <- weights > 0
         varmu <- variance(mu)[good]
@@ -334,7 +353,7 @@ bayesglm.fit <- function (x, y, weights = rep(1, nobs), start = NULL, etastart =
         # coefs.hat <- rep(0, NCOL(x))   # why do we need coefs.hat here? SU 2015.3.30
         x.star <- rbind(x, diag(NCOL(x)))
         if(intercept&scaled){
-            x.star[nobs+1,] <- colMeans(x)
+            x.star[nobs+1,] <- colSums(x * wts)/sum(wts)
         }
         z.star <- c (z, prior.mean)
         w.star <- c (w, sqrt(dispersion)/prior.sd)
@@ -363,8 +382,11 @@ bayesglm.fit <- function (x, y, weights = rep(1, nobs), start = NULL, etastart =
         dev <- sum(dev.resids(y, mu, weights))
         if (!(family$family %in% c("poisson", "binomial"))) {
             x.good <- x[good, , drop = FALSE]
-            mse.resid <- mean((w * (z - x.good %*% coefs.hat))^2)
-            mse.uncertainty <- mean(rowSums(( x.good %*% V.coefs ) * x.good)) * dispersion # faster
+            # averaged over the weighted sample, so that a weight of 2 is
+            # the same as a duplicated row here too
+            w.good <- weights[good]
+            mse.resid <- sum(w.good * (w * (z - x.good %*% coefs.hat))^2)/sum(w.good)
+            mse.uncertainty <- sum(w.good * rowSums(( x.good %*% V.coefs ) * x.good))/sum(w.good) * dispersion # faster
             dispersion <- mse.resid + mse.uncertainty
         }
         if (control$trace)
@@ -419,9 +441,15 @@ bayesglm.fit <- function (x, y, weights = rep(1, nobs), start = NULL, etastart =
 # print unnormalized log posterior
 #================================
         if (family$family == "binomial" && print.unnormalized.log.posterior) {
-            logprior <- sum(dt(coefs.hat, prior.df, prior.mean, log = TRUE))
-            xb <- invlogit( x %*% coefs.hat )
-            loglikelihood <- sum( log( c( xb[ y == 1 ], 1 - xb[ y == 0 ] ) ) )
+            # the prior is a scaled t: location prior.mean, scale prior.scale,
+            # df prior.df.  dt()'s third argument is the non-centrality, not
+            # the location, and it has no scale argument at all.
+            logprior <- sum(dt((coefs.hat - prior.mean)/prior.scale, prior.df,
+                log = TRUE) - log(prior.scale))
+            # the link is the family's, not always logit; weights are the
+            # binomial totals, so this is the log likelihood glm reports
+            xb <- linkinv(drop(x %*% coefs.hat) + offset)
+            loglikelihood <- sum(weights * (y * log(xb) + (1 - y) * log(1 - xb)))
             cat( "log prior: ", logprior, ", log likelihood: ", loglikelihood, ",
             unnormalized log posterior: ", loglikelihood +logprior, "\n" ,sep="")
         }
@@ -439,22 +467,22 @@ bayesglm.fit <- function (x, y, weights = rep(1, nobs), start = NULL, etastart =
             coef <- coefold <- start
         }
     }
-        if (!conv){
+        if (!conv && Warning) {
             warning("algorithm did not converge", call. = FALSE)
         }
-        if (boundary){
+        if (boundary && Warning) {
             warning("algorithm stopped at boundary value",
                 call. = FALSE)
         }
         eps <- 10 * .Machine$double.eps
         if (family$family == "binomial") {
-            if (any(mu > 1 - eps) || any(mu < eps)){
+            if ((any(mu > 1 - eps) || any(mu < eps)) && Warning) {
                 warning("fitted probabilities numerically 0 or 1 occurred",
                   call. = FALSE)
             }
         }
         if (family$family == "poisson") {
-            if (any(mu < eps)){
+            if (any(mu < eps) && Warning) {
                 warning("fitted rates numerically 0 occurred",
                   call. = FALSE)
             }

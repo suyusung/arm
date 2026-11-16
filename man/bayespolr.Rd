@@ -101,7 +101,10 @@ bayespolr(formula, data, weights, start,  ...,
     (intercepts). If it is a scalar, it is expanded to the length of
     this vector.}
 
-  \item{maxit}{integer giving the maximal number of IWLS iterations, default is 100. This can also be controlled by \code{control}.}
+  \item{maxit}{integer giving the maximal number of iterations, default is 100.
+          It bounds both the iterative fit used to find starting values and the
+          \code{optim} run that fits the model.  An \code{optim} \code{control}
+          passed through \code{\dots} takes precedence.}
 
   \item{print.unnormalized.log.posterior}{display the unnormalized log posterior
     density for the \code{bayespolr} fit; default \code{FALSE}.}
