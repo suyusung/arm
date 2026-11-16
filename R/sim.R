@@ -18,8 +18,16 @@ setMethod("sim", signature(object = "lm"),
       beta[s,] <- MASS::mvrnorm (1, beta.hat, V.beta*sigma[s]^2)
     }
 
+    # summary() drops aliased coefficients, so `beta` holds only the
+    # estimable columns.  sim(glm) keeps every coefficient in
+    # coefficients(object) and fills the aliased ones with 0, so do the
+    # same here (s2).
+    beta.full <- array (0, c(n.sims, length(coefficients(object))),
+                        dimnames = list (NULL, names(coefficients(object))))
+    beta.full[, colnames(beta)] <- beta
+
     ans <- new("sim",
-                coef = beta,
+                coef = beta.full,
                 sigma = sigma)
     return (ans)
     }
@@ -97,7 +105,8 @@ setMethod("sim", signature(object = "polr"),
   }
 )
 
-sim.coxph <- function(object, n.sims = 100) {
+setMethod("sim", signature(object = "coxph"),
+  function(object, n.sims = 100) {
   if (!requireNamespace("MASS", quietly = TRUE)) {
     stop("Package 'MASS' needed for this function to work. Please install it.")
   }
@@ -128,9 +137,10 @@ sim.coxph <- function(object, n.sims = 100) {
   class(ans) <- "sim.coxph"
   
   return(ans)
-}
+})
 
-sim.plm <- function(object, n.sims = 100) {
+setMethod("sim", signature(object = "plm"),
+  function(object, n.sims = 100) {
   # Load required package
   if (!requireNamespace("MASS", quietly = TRUE)) {
     stop("Package 'MASS' needed for this function to work. Please install it.")
@@ -182,21 +192,12 @@ sim.plm <- function(object, n.sims = 100) {
     }
   })
   
-  # Unscale covariance matrix of coefficients if necessary
-  # Sometimes vcov(object) already includes sigma^2, so unscale it:
-  Vbeta_raw <- tryCatch(vcov(object),
-                        error = function(e) stop("Failed to get vcov of the object"))
-  
-  # Check if Vbeta_raw is scaled by sigma.hat^2 (heuristic)
-  # If max diagonal is more than 100 times sigma.hat^2, probably not scaled
-  diag_vcov <- diag(Vbeta_raw)
-  if(all(diag_vcov > 0) && max(diag_vcov) > 100 * sigma.hat^2) {
-    # Assume vcov returns unscaled covariance of coefficients: multiply by sigma^2
-    V.beta <- Vbeta_raw * sigma.hat^2
-  } else {
-    # Assume vcov gives scaled covariance (multiplied by sigma^2), so unscale it
-    V.beta <- Vbeta_raw
-  }
+  # vcov(plm) is already scaled by the estimated error variance -- the
+  # summary's standard errors are exactly sqrt(diag(vcov(object))) -- so it
+  # is the marginal covariance of the coefficient draws as-is.  Multiplying
+  # it by sigma[s]^2 below would count the dispersion a second time (s1).
+  V.beta <- tryCatch(vcov(object),
+                     error = function(e) stop("Failed to get vcov of the object"))
   
   # Preallocate outputs
   sigma <- numeric(n.sims)
@@ -208,13 +209,14 @@ sim.plm <- function(object, n.sims = 100) {
     sigma[s] <- sigma.hat * sqrt( (n - k) / rchisq(1, df = n - k) )
     
     # Draw beta conditional on sigma
-    beta[s, ] <- MASS::mvrnorm(1, mu = coefmat[, "coef.est"], Sigma = V.beta * sigma[s]^2)
+    beta[s, ] <- MASS::mvrnorm(1, mu = coefmat[, "coef.est"], Sigma = V.beta)
   }
   
-  ans <- list(coef = beta, sigma = sigma)
-  class(ans) <- "sim"
+  ans <- new("sim",
+             coef = beta,
+             sigma = sigma)
   return(ans)
-}
+})
 
 
 
