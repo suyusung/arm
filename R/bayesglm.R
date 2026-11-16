@@ -92,8 +92,7 @@ bayesglm <- function (formula, family = gaussian, data, weights, subset,
         fit2 <- bayesglm.fit(x = X[, "(Intercept)",
             drop = FALSE], y = Y, weights = weights, offset = offset,
             family = family, control = control, intercept = TRUE,
-            prior.mean = prior.mean, prior.scale = prior.scale,
-            prior.df = prior.df, prior.mean.for.intercept =
+            prior.mean.for.intercept =
             prior.mean.for.intercept,
             prior.scale.for.intercept = prior.scale.for.intercept,
             prior.df.for.intercept = prior.df.for.intercept,
