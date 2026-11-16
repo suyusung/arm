@@ -3,6 +3,8 @@ setOldClass("mcmc.list")
 setOldClass("polr")
 setOldClass("bugs")
 setOldClass("svyglm")
+setOldClass("plm")
+setOldClass("coxph")
 
 setClass("balance",
      representation(

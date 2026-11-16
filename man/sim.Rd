@@ -6,6 +6,8 @@
 \alias{sim,lm-method}
 \alias{sim,glm-method}
 \alias{sim,polr-method}
+\alias{sim,plm-method}
+\alias{sim,coxph-method}
 \alias{sim,merMod-method}
 \alias{coef.sim}
 \alias{coef.sim.polr}
@@ -22,6 +24,8 @@
 \description{
 This generic function gets posterior simulations of sigma and beta from a \code{lm} object, or
 simulations of beta from a \code{glm} object, or
+simulations of beta from a \code{polr} object, or
+simulations of beta from a \code{plm} or \code{coxph} object, or
 simulations of beta from a \code{merMod} object.
 }
 
@@ -31,6 +35,8 @@ sim(object, ...)
 \S4method{sim}{lm}(object, n.sims = 100)
 \S4method{sim}{glm}(object, n.sims = 100)
 \S4method{sim}{polr}(object, n.sims = 100)
+\S4method{sim}{plm}(object, n.sims = 100)
+\S4method{sim}{coxph}(object, n.sims = 100)
 \S4method{sim}{merMod}(object, n.sims = 100)
 
 \method{coef}{sim}(object,\dots)
@@ -45,7 +51,8 @@ sim(object, ...)
 
 \arguments{
   \item{object}{the output of a call to \code{lm}, \code{glm}, \code{polr},
-    \code{lmer} or \code{glmer}, with n data points and k predictors.}
+    \code{plm}, \code{coxph}, \code{lmer} or \code{glmer}, with n data
+    points and k predictors.}
   \item{slot}{return which slot of \code{sim.polr}, available options are \code{coef, zeta, ALL}.}
   \item{...}{further arguments passed to or from other methods.}
   \item{n.sims}{number of independent simulation draws to create.}
