@@ -3,6 +3,8 @@ discrete.histogram <- function (x, prob, prob2 = NULL, prob3 = NULL, xlab = "x",
     prob2.col = "red", prob3.col = "gray", ...)
 {
     if (!missing(x) && missing(prob)) {
+        if (is.factor(x)) 
+            x <- droplevels(x)
         prob <- table(x)
         x <- sort(unique(x))
     }
@@ -18,19 +20,29 @@ discrete.histogram <- function (x, prob, prob2 = NULL, prob3 = NULL, xlab = "x",
     else {
         ylab <- "Count"
     }
+    dot.args <- list(...)
+    if (!is.null(dot.args$ylab)) {
+        ylab <- dot.args$ylab
+        dot.args$ylab <- NULL
+    }
     if (is.numeric(x)) {
         x.values <- sort(unique(x))
         n.x.values <- length(x.values)
         if (is.null(bar.width)) {
-            gaps <- x.values[2:n.x.values] - x.values[1:(n.x.values -
-                1)]
-            bar.width <- min(gaps) * 0.2
+            if (n.x.values > 1) {
+                gaps <- x.values[2:n.x.values] - x.values[1:(n.x.values -
+                  1)]
+                bar.width <- min(gaps) * 0.2
+            }
+            else {
+                bar.width <- 0.2
+            }
         }
         par(mar = c(3, 3, 4, 1), mgp = c(1.7, 0.5, 0), tck = -0.01)
-        plot(range(x) + c(-2, 2) * bar.width, c(0, max(prob,
-            prob2, prob3)), xlab = xlab, ylab = ylab, xaxs = "i",
-            xaxt = "n", yaxs = "i", yaxt = ifelse(is.null(yaxs.label),
-                "s", "n"), bty = "l", type = "n", ...)
+        do.call(plot, c(list(range(x) + c(-2, 2) * bar.width, c(0,
+            max(prob, prob2, prob3)), xlab = xlab, ylab = ylab,
+            xaxs = "i", xaxt = "n", yaxs = "i", yaxt = ifelse(is.null(yaxs.label),
+                "s", "n"), bty = "l", type = "n"), dot.args))
         if (is.null(xaxs.label)) {
             axis(1, x.values)
         }
@@ -45,10 +57,10 @@ discrete.histogram <- function (x, prob, prob2 = NULL, prob3 = NULL, xlab = "x",
             bar.width <- 0.2
         }
         par(mar = c(3, 3, 4, 1), mgp = c(1.7, 0.5, 0), tck = -0.01)
-        plot(c(1, n.x.values) + c(-2, 2) * bar.width, c(0, max(prob,
-            prob2, prob3)), xlab = xlab, ylab = ylab, xaxs = "i",
-            xaxt = "n", yaxs = "i", yaxt = ifelse(is.null(yaxs.label),
-                "s", "n"), bty = "l", type = "n", ...)
+        do.call(plot, c(list(c(1, n.x.values) + c(-2, 2) * bar.width,
+            c(0, max(prob, prob2, prob3)), xlab = xlab, ylab = ylab,
+            xaxs = "i", xaxt = "n", yaxs = "i", yaxt = ifelse(is.null(yaxs.label),
+                "s", "n"), bty = "l", type = "n"), dot.args))
         if (is.null(xaxs.label)) {
             axis(1, 1:n.x.values, x.values)
         }
