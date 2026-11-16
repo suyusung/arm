@@ -31,7 +31,6 @@ bayesglm <- function (formula, family = gaussian, data, weights, subset,
         "etastart", "mustart", "offset"), names(mf), 0L)
     mf <- mf[c(1L, m)]
     mf$drop.unused.levels <- drop.unused.levels
-    mf$na.action <- NULL
     mf[[1L]] <- quote(stats::model.frame)
     mf <- eval(mf, parent.frame())
     if (identical(method, "model.frame")){
@@ -55,7 +54,7 @@ bayesglm <- function (formula, family = gaussian, data, weights, subset,
         }
     }
     X <- if (!is.empty.model(mt)) {
-        model.matrixBayes(object = mt, data = data, contrasts.arg = contrasts,
+        model.matrixBayes(object = mt, data = mf, contrasts.arg = contrasts,
             keep.order = keep.order, drop.baseline = drop.baseline)
     }else {
         matrix(, NROW(Y), 0L)
