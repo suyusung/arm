@@ -15,7 +15,7 @@ as.matrix.VarCorr <- function (x, ..., useScale, digits){
 #   1.  specify rounding
 #   2.  print statement at end is removed
 #   3.  reMat is returned
-#   4.  last line kept in reMat even when there's no error term
+#   4.  Residual line dropped when the model has no scale parameter
                   sc <- attr(x, "sc")[[1]]   
                   if(is.na(sc)) sc <- 1 
 #                  recorr <- lapply(varc, function(el) el@factors$correlation)
@@ -50,7 +50,8 @@ as.matrix.VarCorr <- function (x, ..., useScale, digits){
                       reMat <- cbind(reMat, rbind(corr, rep("", ncol(corr))))
                   }
 #                  if (!useScale) reMat <- reMat[-nrow(reMat),]
-          if (useScale<0) reMat[nrow(reMat),] <- c ("No residual sd", rep("",ncol(reMat)-1))
+          # useScale is lme4's 0/1 useSc flag: no Residual row without a scale parameter
+          if (!useScale) reMat <- reMat[-nrow(reMat), , drop = FALSE]
           return (reMat)
       }
 
