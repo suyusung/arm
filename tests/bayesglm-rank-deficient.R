@@ -12,11 +12,11 @@
 ##
 ## glm() returns NA for the aliased coefficient instead of erroring.
 ##
-## The fix initialises `coef` (and `dev`) before the loop, so the same
-## situation now returns a fit with NA coefficients and the usual warnings.
-## Deciding *which* coefficient is aliased, and returning numbers for the
-## others as glm does, needs the design to be reduced before fitting; that
-## is left for later and is why this test pins the crash, not the estimate.
+## The fix initialises `coef` (and `dev`) before the loop -- so the rank fix-up
+## no longer indexes a function -- and then hands the problem to glm.fit(),
+## which detects the aliased columns, returns NA for them and estimates the
+## rest.  A flat prior means the prior is not doing anything, so glm's answer
+## is the right limit, and it is what this test pins.
 ## =====================================================================
 
 library(arm)
@@ -31,10 +31,15 @@ fit <- try(bayesglm(y ~ x1 + x2 + x3, binomial, d, prior.scale = 1e8), silent = 
 stopifnot("a rank-deficient fit with a flat prior still errors (issue #54 is back)" =
             !inherits(fit, "try-error"))
 
-## it reports failure rather than inventing numbers
-stopifnot("the degenerate fit claims to have converged" = !fit$converged)
-stopifnot("the degenerate fit returned finite coefficients" =
-            all(is.na(coef(fit))))
+## it now gives what glm() gives: NA for the aliased coefficient only, and
+## numbers for the ones the data can estimate
+g <- glm(y ~ x1 + x2 + x3, binomial, d)
+stopifnot("the degenerate fit does not fall back to glm's coefficients" =
+            isTRUE(all.equal(unname(coef(fit)), unname(coef(g)), tolerance = 1e-6)))
+stopifnot("the aliased coefficient is not the only NA" =
+            identical(is.na(coef(fit)), is.na(coef(g))))
+stopifnot("the aliased column is not the missing one" =
+            is.na(coef(fit))[["x3"]] && sum(is.na(coef(fit))) == 1L)
 
 ## and the same design with the default prior still fits properly: the prior
 ## is what makes the augmented system non-singular, so nothing changed there

@@ -51,7 +51,7 @@ setMethod("traceplot", signature(x = "bugs"),
     range.y  <- range( bugs.array[,,j] )
     v.name   <- dimnames( bugs.array )[[3]][j]
     plot( range.x, range.y, type = "n", main = v.name,
-            xlab = "kept iteration", ylab = v.name,
+            xlab = "Kept draws", ylab = v.name,
               xaxt  = "n", xaxs = "i", ... )
     for( i in 1:n.chain ) {
       x.cord <- 1:n.keep

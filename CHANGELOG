@@ -16,9 +16,10 @@
         longer fails with "invalid 'labels'".  model.matrixBayes() copied
         attr(object, "intercept") onto its terms and a fitted model has none, so
         it copied NULL and the design matrix came back without an intercept.
-      * R/bayesglm: a rank-deficient fit with a prior too flat to carry weight
-        returns NA coefficients with a warning instead of "object of type 'closure'
-        is not subsettable".
+      * R/bayesglm: a rank-deficient fit with a prior too flat to carry weight no
+        longer fails with "object of type 'closure' is not subsettable".  The prior
+        is doing nothing in that case, so the fit is handed to glm.fit(), which
+        returns NA for the aliased coefficient and numbers for the rest.
       * R/bayesglm: a start of the wrong length reports the length it wanted
         instead of "the condition has length > 1".
       * R/bayesglm: with scaled = TRUE the prior scales, the augmentation means
@@ -47,7 +48,8 @@
         unused level, and ylab = passed through the dots.
       * R/triangleplot: the legend digit search no longer stops with "Too many
         digits!" on close-together correlations.
-      * R/traceplot: labels the kept draws "kept iteration".
+      * R/traceplot: a bugs trace plot labels its vertical axis "Kept draws", the
+        index the axis actually carries, rather than "iteration".
       * man/multicomp.plot.Rd: documents abbreviate(label, minlength = 2) rather
         than "the first 2 characters".
       * tests/: 23 new regression-test files, one per finding above; each fails on

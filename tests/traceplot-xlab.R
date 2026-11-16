@@ -6,7 +6,7 @@
 ## burn-in and thinning the two differ, so the label read as if it were the
 ## iteration number.
 ##
-## The fix: the axis is labelled "kept iteration", which is what the
+## The fix: the axis is labelled "Kept draws", which is exactly what the
 ## positions are.
 ## =====================================================================
 
@@ -30,4 +30,4 @@ dev.off()
 invisible(suppressMessages(untrace("plot", where = asNamespace("graphics"))))
 
 stopifnot("traceplot() labels the kept draws as 'iteration'" =
-            length(seen$xlab) == 2 && all(seen$xlab == "kept iteration"))
+            length(seen$xlab) == 2 && all(seen$xlab == "Kept draws"))

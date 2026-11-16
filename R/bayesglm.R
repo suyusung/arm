@@ -365,9 +365,22 @@ bayesglm.fit <- function (x, y, weights = rep(1, nobs), start = NULL, etastart =
             #    check = FALSE)
         fit <- lm.fit(x = x.star[good.star,,drop=FALSE]*w.star, y = z.star*w.star)
         if (any(!is.finite(fit$coefficients))) {
-            conv <- FALSE
-            warning(gettextf("non-finite coefficients at iteration %d",
-                  iter), domain = NA)
+            # The prior's pseudo-rows carry no weight here -- a prior flat
+            # enough that the augmented design is numerically singular -- so
+            # this is glm's problem, not a Bayesian one.  hand it to glm.fit(),
+            # which detects the aliased columns, sets their coefficients to NA
+            # and keeps the ones the data can estimate.
+            if (Warning) {
+                warning(gettextf("non-finite coefficients at iteration %d",
+                      iter), domain = NA)
+            }
+            fit <- glm.fit(x, y, weights = weights, offset = offset,
+                family = family, control = control, intercept = intercept)
+            conv <- fit$converged
+            coef <- fit$coefficients
+            eta <- fit$linear.predictors
+            mu <- fit$fitted.values
+            dev <- fit$deviance
             break
         }
         start[fit$qr$pivot] <- coefs.hat <- fit$coefficients
