@@ -125,7 +125,7 @@ Each has a help page: `?display`, `?coefplot`, `?sim`.
 
 ## Links
 
-* [CRAN page](https://CRAN.R-project.org/package=arm) and the [reference manual](https://cran.r-project.org/web/packages/arm/arm.pdf)
+* [CRAN page](https://CRAN.R-project.org/package=arm), where the reference manual and the vignettes are linked
 * Bug reports and questions — [issue tracker](https://github.com/suyusung/arm/issues)
 * What changed in each release — [CHANGELOG](https://github.com/suyusung/arm/blob/master/CHANGELOG)
 
