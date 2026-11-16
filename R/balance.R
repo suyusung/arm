@@ -51,8 +51,10 @@ balance <- function (rawdata, treat, matched, estimand="ATT")
       diff.means[i, 3] <- diff.means[i, 1] - diff.means[i, 2]
     # standardized difference in means (sign intact)
       diff.means[i, 4] <- abs(diff.means[i, 3]/std.denom[i])
-      if(length(unique(rawdata[,covnames[i]]))>2){
+      if(length(unique(rawdata[,i]))>2){
           binary[i] = 0
+          # ratio of sds (control over treated), for continuous covariates
+          diff.means[i, 5] <- sqrt(var.c[i]/var.t[i])
       }
   }
     #ifelse(estimand="ATT",sqrt(var.c[i]/var.t[i]),sqrt(var.t[i]/var.c[i]))
@@ -79,9 +81,9 @@ balance <- function (rawdata, treat, matched, estimand="ATT")
     # absolute standardized difference in means (denominator is stolen from
     # calculations on raw data above)
     diff.means.matched[i, 4] <- abs(diff.means.matched[i, 3])/std.denom[i]
-    if(length(unique(rawdata[,covnames[i]]))>2){
-      # just for binary
-      # ratio of sds (treat over control:  should we change to comparison over inferential)
+    if(length(unique(rawdata[,i]))>2){
+      # just for continuous
+      # ratio of sds (control over treated)
       diff.means.matched[i, 5] <- sqrt(var.c[i]/var.t[i])
   }
 }
@@ -196,14 +198,14 @@ plot.balance <- function(x, longcovnames=NULL, which.covs="mixed",
                 #xlim=c(0, max(c(pts,pts2))),
                 bty="n", xlab="", ylab="",
                 xaxt="n", yaxt="n", type="n",
-                main=main, cex.main=cex.main)
+                main=main, cex.main=cex.main, ...)
         }
         if(!is.null(x.max)){
             plot(c(pts,pts2), c(idx,idx),
                 bty="n", xlab="", ylab="",
                 xaxt="n", yaxt="n", type="n",
                 xlim=x.range,
-                main=main, cex.main=cex.main)
+                main=main, cex.main=cex.main, ...)
         }
         abline(v=0, lty=2)
         points(pts, idx, cex=cex.pts)          # before matched
