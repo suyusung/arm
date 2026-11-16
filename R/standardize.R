@@ -1,6 +1,7 @@
-standardize.default <- function(call, unchanged = NULL,
+standardize.default <- function(call, env, unchanged = NULL,
                                  standardize.y = FALSE, binary.inputs = "center") {
-  form <- eval(call$formula, envir = parent.frame())
+  # env: where the model was fitted; the call, formula and data are found there
+  form <- eval(call$formula, envir = env)
   varnames <- all.vars(form)
   n.vars <- length(varnames)
   
@@ -14,9 +15,9 @@ standardize.default <- function(call, unchanged = NULL,
     v <- varnames[i]
     # Retrieve the data
     if (is.null(call$data)) {
-      thedata <- get(v)
+      thedata <- get(v, envir = env)
     } else {
-      thedata <- get(as.character(call$data))[[v]]
+      thedata <- get(as.character(call$data), envir = env)[[v]]
     }
     
     # Check if thedata is valid
@@ -46,18 +47,19 @@ standardize.default <- function(call, unchanged = NULL,
   transformed.variables <- (1:n.vars)[transform != "leave.alone"]
   
   # Define the new variables
+  newenv <- new.env(parent = env)
   if (is.null(call$data)) {
     for (i in transformed.variables) {
-      assign(varnames.new[i], rescale(get(varnames[i]), binary.inputs))
+      assign(varnames.new[i], rescale(get(varnames[i], envir = env), binary.inputs), envir = newenv)
     }
   } else {
     newvars <- NULL
     for (i in transformed.variables) {
-      new_var <- rescale(get(as.character(call$data))[[varnames[i]]], binary.inputs)
-      assign(varnames.new[i], new_var)  # Assign to global environment
+      new_var <- rescale(get(as.character(call$data), envir = env)[[varnames[i]]], binary.inputs)
+      assign(varnames.new[i], new_var, envir = newenv)
       newvars <- cbind(newvars, new_var)  # Combine new variables for output
     }
-    assign(as.character(call$data), cbind(get(as.character(call$data)), newvars))
+    assign(as.character(call$data), cbind(get(as.character(call$data), envir = env), newvars), envir = newenv)
   }
   
   # Now call the regression with the new variables
@@ -72,9 +74,9 @@ standardize.default <- function(call, unchanged = NULL,
   formula <- paste(formula[2], formula[1], formula[3])
   formula <- gsub("factor(z.", "factor(", formula, fixed = TRUE)
   formula <- gsub("factor(c.", "factor(", formula, fixed = TRUE)
-  call.new$formula <- as.formula(formula)
+  call.new$formula <- as.formula(formula, env = newenv)
   
-  return(eval(call.new))
+  return(eval(call.new, newenv))
 }
 
 
@@ -82,7 +84,8 @@ setMethod("standardize", signature(object = "lm"),
   function(object, unchanged = NULL, 
            standardize.y = FALSE, binary.inputs = "center") {
     call <- object$call
-    out <- standardize.default(call = call, unchanged = unchanged, 
+    out <- standardize.default(call = call, env = environment(formula(object)),
+                               unchanged = unchanged, 
                                standardize.y = standardize.y, 
                                binary.inputs = binary.inputs)
     return(out)
@@ -93,7 +96,8 @@ setMethod("standardize", signature(object = "glm"),
   function(object, unchanged = NULL, 
            standardize.y = FALSE, binary.inputs = "center") {
     call <- object$call
-    out <- standardize.default(call = call, unchanged = unchanged, 
+    out <- standardize.default(call = call, env = environment(formula(object)),
+                               unchanged = unchanged, 
                                standardize.y = standardize.y, 
                                binary.inputs = binary.inputs)
     return(out)
@@ -104,7 +108,8 @@ setMethod("standardize", signature(object = "polr"),
   function(object, unchanged = NULL, 
            standardize.y = FALSE, binary.inputs = "center") {
     call <- object$call
-    out <- standardize.default(call = call, unchanged = unchanged, 
+    out <- standardize.default(call = call, env = environment(formula(object)),
+                               unchanged = unchanged, 
                                standardize.y = standardize.y, 
                                binary.inputs = binary.inputs)
     return(out)
@@ -115,7 +120,8 @@ setMethod("standardize", signature(object = "merMod"),
   function(object, unchanged = NULL, 
            standardize.y = FALSE, binary.inputs = "center") {
     call <- object@call  # For merMod, use @ instead of $
-    out <- standardize.default(call = call, unchanged = unchanged, 
+    out <- standardize.default(call = call, env = environment(formula(object)),
+                               unchanged = unchanged, 
                                standardize.y = standardize.y, 
                                binary.inputs = binary.inputs)
     return(out)
