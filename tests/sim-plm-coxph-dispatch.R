@@ -20,6 +20,14 @@
 ## =====================================================================
 
 library(arm)
+
+## plm and survival are neither Depends nor Suggests here, and R CMD check
+## runs every tests/*.R, so skip rather than fail where they are missing.
+if (!requireNamespace("plm", quietly = TRUE) ||
+    !requireNamespace("survival", quietly = TRUE)) {
+    cat("plm and/or survival not installed: skipping the sim dispatch test\n")
+    quit(save = "no", status = 0)
+}
 library(plm)
 library(survival)
 
