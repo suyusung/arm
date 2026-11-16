@@ -32,7 +32,7 @@ coefplot.default <- function(coefs, sds, CI=2,
       coefs.h <- coefs + CI*sds 
       coefs.l <- coefs - CI*sds
       est1 <- cbind(coefs - sds, coefs + sds)
-      est2 <- cbind(coefs - 2*sds, coefs + 2*sds)
+      est2 <- cbind(coefs - CI*sds, coefs + CI*sds)
       if(!missing(lower.conf.bounds)){
         est1[,1] <- lower.conf.bounds
         CI <- 1
@@ -98,7 +98,7 @@ coefplot.default <- function(coefs, sds, CI=2,
           }
           abline(v=0, lty=2)                                                 
           points(coefs, idx, pch=pch.pts, cex=cex.pts, col=col.pts)
-          if (CI==2){
+          if (CI != 1){
             segments (est1[,1], idx, est1[,2], idx, lwd=2, col=col.pts)     
             segments (est2[,1], idx, est2[,2], idx, lwd=1, col=col.pts)
           }
@@ -109,7 +109,7 @@ coefplot.default <- function(coefs, sds, CI=2,
         else{
           idx <- idx + offset
           points(coefs, idx, pch=pch.pts, cex=cex.pts, col=col.pts)
-          if (CI==2){
+          if (CI != 1){
             segments (est1[,1], idx, est1[,2], idx, lwd=2, col=col.pts)     
             segments (est2[,1], idx, est2[,2], idx, lwd=1, col=col.pts)
           }
@@ -134,22 +134,22 @@ coefplot.default <- function(coefs, sds, CI=2,
         }
         abline(h=0, lty=2)                                                 
         points(idx, coefs, pch=pch.pts, cex=cex.pts, col=col.pts)
-        if (CI==2){
+        if (CI != 1){
           segments (idx, est1[,1], idx, est1[,2], lwd=2, col=col.pts)     
           segments (idx, est2[,1], idx, est2[,2], lwd=1, col=col.pts)
         }
-        else if (CI==1) {
+        else {
           segments (idx, est1[,1], idx, est1[,2], lwd=1, col=col.pts)     
         }
       }
       else{
         idx <- idx + offset
         points(idx, coefs, pch=pch.pts, cex=cex.pts, col=col.pts)
-        if (CI==2){
+        if (CI != 1){
           segments (idx, est1[,1], idx, est1[,2], lwd=2, col=col.pts)     
           segments (idx, est2[,1], idx, est2[,2], lwd=1, col=col.pts)
         }
-        else if (CI==1) {
+        else {
           segments (idx, est1[,1], idx, est1[,2], lwd=1, col=col.pts)     
         }
       }

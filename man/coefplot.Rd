@@ -49,9 +49,10 @@ coefplot(object,\dots)
   \item{sds}{a vector of standard deviations of the coefficients.}
   \item{CI}{confidence interval, default is 2, which will plot plus and minus 2 sds
     (about a 95\% interval) over plus and minus 1 sd. If CI=1, plot plus and
-    minus 1 sd (about a 68\% interval) only. For a \code{bugs} object the default
-    is 1, which plots the 50\% interval (25\% to 75\% quantiles); CI=2 adds the
-    95\% interval (2.5\% to 97.5\% quantiles).}
+    minus 1 sd (about a 68\% interval) only; any other value plots plus and
+    minus \code{CI} sds over plus and minus 1 sd. For a \code{bugs} object the
+    default is 1, which plots the 50\% interval (25\% to 75\% quantiles); CI=2
+    adds the 95\% interval (2.5\% to 97.5\% quantiles).}
   \item{lower.conf.bounds}{lower bounds of confidence intervals.}
   \item{upper.conf.bounds}{upper bounds of confidence intervals.}
   \item{varnames}{a vector of variable names, default is NULL, which will use
