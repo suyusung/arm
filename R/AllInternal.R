@@ -86,7 +86,7 @@ dwish <- function (W, v, S) {
         stop(message = "W not square in dwish()\n\n")
     }
     if (!is.matrix(W)) 
-        S <- matrix(W)
+        W <- matrix(W)
     if (nrow(W) != ncol(W)) {
         stop(message = "W not square in dwish()\n\n")
     }
