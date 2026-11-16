@@ -66,6 +66,8 @@ matching <- function(z, score, replace=FALSE){
   }
   #  matching *without* replacement
   if (!replace){
+    if (nt > nc) stop("matching without replacement needs at least as many controls as treated units (",
+                      nt, " treated, ", nc, " controls); use replace = TRUE")
     pairs = rep(NA,n)
     match.ind <- rep(0, n)
     tally <- 0
