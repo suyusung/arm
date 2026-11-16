@@ -49,6 +49,10 @@ rescale <- function(x, binary.inputs = "center") {
             return((x - mean(x.obs)) / (2 * sd(x.obs)))  # Standardize
         }
     } else {
+        if (length(unique(x.obs)) == 1) {
+            # a constant has no spread: centre it rather than dividing 0 by 0
+            return(x - mean(x.obs))
+        }
              return ((x-mean(x.obs))/(2*sd(x.obs)))
         }
 }
