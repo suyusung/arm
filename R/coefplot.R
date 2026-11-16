@@ -295,7 +295,7 @@ setMethod("coefplot", signature(object = "bugs"),
       par(mar=mar)
       if(add){
         segments (CI50[,1], idx+offset, CI50[,2], idx+offset, lwd=1, col=col.pts)     
-        points(coefs, idx+offset, pch=20, cex=cex.pts, col=col.pts)
+        points(coefs, idx+offset, pch=pch.pts, cex=cex.pts, col=col.pts)
       }
       else{
         plot(c(CI50[,1],CI50[,2]), c(idx+k,idx-k), type="n", 
@@ -310,7 +310,7 @@ setMethod("coefplot", signature(object = "bugs"),
           }
           abline(v=0, lty=2)                                                 
           segments (CI50[,1], idx, CI50[,2], idx, lwd=1, col=col.pts)     
-          points(coefs, idx, pch=20, cex=cex.pts, col=col.pts)  
+          points(coefs, idx, pch=pch.pts, cex=cex.pts, col=col.pts)  
         }
       }
     }
@@ -319,7 +319,7 @@ setMethod("coefplot", signature(object = "bugs"),
       par(mar=mar)
       if(add){
           segments (idx+offset, CI50[,1], idx+offset, CI50[,2], lwd=1, col=col.pts)     
-          points(idx+offset, coefs, pch=20, cex=cex.pts, col=col.pts)
+          points(idx+offset, coefs, pch=pch.pts, cex=cex.pts, col=col.pts)
       }
       else{
         plot(c(idx+k,idx-k), c(CI50[,1],CI50[,2]), type="n",                                     
@@ -335,7 +335,7 @@ setMethod("coefplot", signature(object = "bugs"),
           
           abline(h=0, lty=2)                                                 
           segments (idx, CI50[,1], idx, CI50[,2], lwd=1, col=col.pts)     
-          points(idx, coefs, pch=20, cex=cex.pts, col=col.pts)
+          points(idx, coefs, pch=pch.pts, cex=cex.pts, col=col.pts)
         }
       }
     }   
@@ -354,7 +354,7 @@ setMethod("coefplot", signature(object = "bugs"),
       if(add){
         segments (CI50[,1], idx+offset, CI50[,2], idx+offset, lwd=2, col=col.pts) 
         segments (CI95[,1], idx+offset, CI95[,2], idx+offset, lwd=1, col=col.pts)    
-        points(coefs, idx+offset, pch=20, cex=cex.pts, col=col.pts)
+        points(coefs, idx+offset, pch=pch.pts, cex=cex.pts, col=col.pts)
       }
       else{
         plot(c(CI95[,1],CI95[,2]), c(idx+k,idx-k), type="n",                                     
@@ -370,7 +370,7 @@ setMethod("coefplot", signature(object = "bugs"),
           abline(v=0, lty=2)                                                 
           segments (CI50[,1], idx, CI50[,2], idx, lwd=2, col=col.pts) 
           segments (CI95[,1], idx, CI95[,2], idx, lwd=1, col=col.pts)    
-          points(coefs, idx, pch=20, cex=cex.pts, col=col.pts)
+          points(coefs, idx, pch=pch.pts, cex=cex.pts, col=col.pts)
         }
       }
     }
@@ -380,7 +380,7 @@ setMethod("coefplot", signature(object = "bugs"),
       if(add){
         segments (idx+offset, CI50[,1], idx+offset, CI50[,2], lwd=2, col=col.pts)
         segments (idx+offset, CI95[,1], idx+offset, CI95[,2], lwd=1, col=col.pts)         
-        points(idx+offset, coefs, pch=20, cex=cex.pts, col=col.pts)        
+        points(idx+offset, coefs, pch=pch.pts, cex=cex.pts, col=col.pts)        
       }
       else{
         plot(c(idx+k,idx-k), c(CI95[,1],CI95[,2]), type="n",                                     
@@ -396,7 +396,7 @@ setMethod("coefplot", signature(object = "bugs"),
           abline(h=0, lty=2)                                                 
           segments (idx, CI50[,1], idx, CI50[,2], lwd=2, col=col.pts)
           segments (idx, CI95[,1], idx, CI95[,2], lwd=1, col=col.pts)         
-          points(idx, coefs, pch=20, cex=cex.pts, col=col.pts)
+          points(idx, coefs, pch=pch.pts, cex=cex.pts, col=col.pts)
         }
       }
     }
