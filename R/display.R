@@ -327,7 +327,8 @@ setMethod("display", signature(object = "svyglm"),
       coef <- summ$coef[, 1:2, drop = FALSE]
     }
     dimnames(coef)[[2]][1:2] <- c("coef.est", "coef.se")
-    out$n <- summ$df[1] + summ$df[2]
+    # summ$df[2] is the residual design df, counted in PSUs, not n - k
+    out$n <- stats::nobs(object)
     out$k <- summ$df[1]
     out$coef <- coef[,"coef.est"]
     out$se <- coef[,"coef.se"]
