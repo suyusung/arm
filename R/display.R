@@ -250,6 +250,9 @@ setMethod("display", signature(object = "merMod"),
     }
     out$coef <- coefs[,"coef.est"]
     out$se <- coefs[,"coef.se"]
+    ## one fixed effect (an intercept-only fit) leaves a one-row matrix, and
+    ## subsetting it drops both dimensions; restore the coefficient name
+    names(out$coef) <- names(out$se) <- rownames(coefs)
     cat("\nError terms:\n")
     vc <- as.matrix.VarCorr (VarCorr (object), useScale=useScale, digits=digits)
     print (vc[,c(1:2,4:ncol(vc)), drop=FALSE], quote=FALSE)
@@ -269,10 +272,6 @@ setMethod("display", signature(object = "merMod"),
     cat(sprintf("\nAIC = %g, DIC = ", round(out$AIC,1)))
     cat(round(out$DIC, 1))
     cat("\ndeviance =", fround (out$deviance, 1), "\n")
-    if (useScale < 0){
-      out$sigma.hat <- .Call("mer_sigma", object, FALSE, PACKAGE = "lme4")
-      cat("overdispersion parameter =", fround (out$sigma.hat, 1), "\n")
-    }
     return(invisible(out))
     }
 )
