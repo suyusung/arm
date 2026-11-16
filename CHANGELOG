@@ -1,3 +1,67 @@
+2026-11-15 Gaurav Sood     (correctness audit; index in issue #54)
+      * R/bayespolr: scaled = TRUE now rescales the prior as documented
+        (prior.scale/range(x) for a two-valued predictor, prior.scale/(2*sd(x))
+        otherwise).  The block was guarded by xint > 1, where xint is the column
+        of the intercept, so it never ran (pull request #29).
+      * R/bayespolr: deviance (and so logLik and AIC) is that of the data.  It was
+        twice the optimised objective, which also holds the log prior and the
+        prior pseudo-counts.  Fitted probabilities now include the offset, as in
+        MASS::polr (pull request #30).
+      * R/bayesglm: for a gaussian response the x-scaling of the prior is kept on
+        every iteration.  It was undone after the first, so estimates depended on
+        the units of x (pull request #46).
+      * R/bayesglm: AIC and logLik for a binomial response with more than one
+        trial pass the trials vector to family$aic, as glm.fit does (pull request #40).
+      * R/bayesglm: the design matrix is built from the model frame, so subset,
+        na.action and drop.unused.levels are honoured (pull request #41).
+      * R/bayesglm: the stored terms are built with keep.order, so predict(se.fit =
+        TRUE) and type = "terms" pair columns with the right coefficients (pull
+        request #44).
+      * R/bayesglm: the dispersion update for families other than binomial and
+        poisson uses only rows with positive weight; with scaled = FALSE a zero
+        weight equals dropping the row (pull request #42).
+      * R/bayesglm: an offset combined with a vector prior no longer errors in the
+        null-deviance refit (pull request #43).
+      * R/bayesglm: control = list(maxit = ) is honoured when maxit is not given
+        (pull request #45).
+      * R/extractDIC, R/display: DIC for merMod fits is the conditional DIC computed
+        from sim() draws, pD = mean deviance - deviance at the mean draw.  The old
+        pD was 0 for ML lmer fits and negative for glmer fits.  extractDIC() gains
+        n.sims and returns pD as an attribute; display() uses a fixed internal seed
+        and restores the caller's (pull request #52).
+      * R/display: for glmer fits without a scale parameter, no Residual sd row
+        (pull request #51); for svyglm, n is the number of observations, not the
+        design degrees of freedom (pull request #50).
+      * R/balance: the matched weights are applied to treated units as well as
+        controls, which matters for IPTW, ATE and ATC (pull request #35).
+        plot.balance() subsets longcovnames with which.covs (pull request #36);
+        print(combined = TRUE) reads diff.means.matched (pull request #37).
+      * R/matching: replace = FALSE stops when there are fewer controls than
+        treated units, instead of returning NA matches (pull request #38).
+      * R/standardize: the data and variables are found in the environment where
+        the model was fitted, not in arm's namespace or the global environment
+        (pull request #39).
+      * R/standardize: stops with an explanation when rescaling makes a transformed
+        input undefined (e.g. log() of a centred variable), instead of silently
+        dropping rows; standardize() no longer errors when nothing is rescaled
+        (pull request #55).
+      * R/sim: n.sims = 1 for glm no longer returns zeros; an intercept-only polr
+        no longer puts a cutpoint into the coef slot (pull request #48).
+      * R/sigma.hat: sigma.hat() for a glm returns sqrt(dispersion) for every
+        family; it returned NULL for all but gaussian (pull request #47).
+      * R/se.coef: se.coef() and se.ranef() handle a list-valued postVar, as for
+        two random-effect terms on one grouping factor (pull request #49).
+      * R/coefplot: the axis range covers user-supplied confidence bounds, which
+        also no longer require sds (pull request #31); the bugs method honours
+        pch.pts (pull request #32).
+      * R/binnedplot: binned.resids() returns the bin breakpoints in xbreaks
+        (pull request #33).
+      * man: coefplot, binnedplot, matching, contrasts.bayes, mcsamp and bayesglm
+        corrected where they disagreed with the code (pull request #34).
+      * DESCRIPTION: URL lists the GitHub repository (pull request #28).
+      * tests: a regression test for each code change above (all except #28 and
+        #34), each checked to fail on the code it guards.
+
 2026-11-07 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
       * DESCRIPTION: (Version, Date): 1.15-4
       * R/rescale: "binary.inputs = -0.5,0.5" now maps the two observed values onto -0.5
