@@ -69,6 +69,13 @@
         frame.
       * tests/: two more regression-test files for those, and a test for the
         shape model.matrixBayes(formula, data) returns.
+      * DESCRIPTION: the license is GPL (>= 2), as in every published release.
+        The 1.15-4 tree had moved it to GPL (>= 3) on 2026-11-07 (entry below);
+        that line is withdrawn.  GPL-3 is one-way incompatible with anything that
+        still has to work with arm on GPL-2 terms, and 12 of the 44 reverse
+        dependencies declare GPL-2 with no later-version option: BayesFactor,
+        blmeco, brms, carcass, factorEx, ltmle, medflex, mlVAR, PSPI, SBMTrees,
+        SEIRfansy, SynDI.  A relicensing is not part of a bug-fix release.
 
 2026-11-15 Gaurav Sood     (correctness audit; index in issue #54)
       * R/bayespolr: scaled = TRUE now rescales the prior as documented
