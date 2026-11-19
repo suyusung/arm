@@ -1,3 +1,18 @@
+2026-11-19 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
+      * R/simmer: sim() for merMod batches its linear algebra into one matrix
+        product and builds each random-effects array once, instead of three
+        matvecs and a split() per draw and an arr[i,,] <- that copied the whole
+        array on every draw -- quadratic in n.sims, and the heavy garbage that
+        made the display() example report over 5s CPU in R CMD check.  The
+        draws stay bit-identical: rgamma() is rejection-based and consumes a
+        variable number of uniforms, so they are still drawn one at a time and
+        the caller's random stream is untouched.
+      * R/extractDIC: dic.merMod evaluates the GLMM deviance over the whole
+        (n obs x n.sims) matrix of draws instead of apply()ing family$aic()
+        one draw at a time, reproducing family$aic() exactly including the
+        binomial weights-into-trials folding.
+      * NAMESPACE: import dbinom and dpois from stats.
+
 2026-11-16 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
       * R/binnedplot, man/binnedplot: the plus and minus 2 SE band is the
         model-based 2*sqrt(p*(1-p)/n) of Gelman and Hill (2007, section 5.6) by

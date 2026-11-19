@@ -3,11 +3,6 @@
 setMethod("sim", signature(object = "merMod"),
           function(object, n.sims=100)
 {
-  applyLeftFactor <- function(decomp, rhs) {
-    c(as.vector(decomp$ul %*% rhs[ranefRange] + decomp$ur %*% rhs[fixefRange]),
-      as.vector(decomp$lr %*% rhs[fixefRange]));
-  }
-
   # information is conditional on hyperparameters
   # information is of [ranef, fixef]
   getInverseInformationLeftFactor <- function(regression) {
@@ -50,12 +45,6 @@ setMethod("sim", signature(object = "merMod"),
     return(list(ul = Lambda %*% Rz.inv, ur = Lambda %*% Rzx.inv, lr = Rx.inv));
   }
 
-  # assumes p(sigma^2) propto sigma^-2
-  sampleCommonScale <- function(ignored) {
-    return(sqrt(1 / rgamma(1, 0.5 * numDoF,
-                           0.5 * devcomp$cmp[["pwrss"]])));
-  }
-
   regression <- object;
   devcomp <- getME(regression, "devcomp");
   dims <- devcomp$dims;
@@ -83,7 +72,6 @@ setMethod("sim", signature(object = "merMod"),
   numCoefficientsPerLevel <- as.numeric(sapply(coefficientNamesPerLevel, length));
   numGroupsPerLevel <- as.numeric(sapply(groupsPerUniqueFactor[factorPerLevel], length));
   numRanefsPerLevel <- numCoefficientsPerLevel * numGroupsPerLevel;
-  ranefLevelMap <- rep.int(seq_along(numRanefsPerLevel), numRanefsPerLevel);
 
   # storage for sims
   simulatedSD    <- if (isLinearMixedModel) { rep(NA, n.sims); } else { NA };
@@ -103,22 +91,54 @@ setMethod("sim", signature(object = "merMod"),
   effectsMean <- c(getME(regression, "b")@x, getME(regression, "beta"));
   effectsCovLeftFactor <- getInverseInformationLeftFactor(regression);
 
-  for (i in 1:n.sims) {
-    if (isLinearMixedModel) {
-      simulatedSD[i] <- sampleCommonScale(regression);
-      sphericalEffects <- rnorm(numEffects, 0, simulatedSD[i]);
-    } else {
-      sphericalEffects <- rnorm(numEffects);
+  # The heavy work below is batched, but the DRAWS stay one-at-a-time:
+  # rgamma() is rejection-based and consumes a variable number of uniforms,
+  # so drawing all gammas up front would shift the shared Mersenne-Twister
+  # stream relative to the old interleaved loop (rgamma(1) then numEffects
+  # rnorms, per draw).  Keeping the loop preserves bit-identical draws --
+  # what display() documents for its fixed-seed DIC -- while the products
+  # run as one BLAS matmul and each ranef array is built once with array()
+  # instead of arr[i,,] <- copying the whole array on every draw (quadratic
+  # in n.sims, and the heavy GC that pushed the display() example over R
+  # CMD check's 5s NOTE threshold).  Same level-major, coefficient-minor
+  # layout as before.
+  sphericalEffects <- matrix(0, n.sims, numEffects)
+  if (isLinearMixedModel) {
+    for (i in seq_len(n.sims)) {
+      simulatedSD[i] <- sqrt(1 / rgamma(1, 0.5 * numDoF,
+                                        0.5 * devcomp$cmp[["pwrss"]]))
+      sphericalEffects[i, ] <- rnorm(numEffects, 0, simulatedSD[i])
     }
-    simulatedEffects <- applyLeftFactor(effectsCovLeftFactor, sphericalEffects) + effectsMean;
-
-    simulatedFixef[i,] <- simulatedEffects[fixefRange];
-
-    rawRanef <- simulatedEffects[ranefRange];
-    simulatedRanefPerLevel <- split(rawRanef, ranefLevelMap);
-    for (k in 1:numLevels) {
-      simulatedRanef[[k]][i,,] <- matrix(simulatedRanefPerLevel[[k]], ncol = numCoefficientsPerLevel[k], byrow = TRUE);
+  } else {
+    for (i in seq_len(n.sims)) {
+      sphericalEffects[i, ] <- rnorm(numEffects)
     }
+  }
+
+  leftFactor <- matrix(0, numEffects, numEffects);
+  leftFactor[ranefRange, ranefRange] <- as.matrix(effectsCovLeftFactor$ul);
+  leftFactor[ranefRange, fixefRange] <- as.matrix(effectsCovLeftFactor$ur);
+  leftFactor[fixefRange, fixefRange] <- as.matrix(effectsCovLeftFactor$lr);
+
+  simulatedEffects <- sphericalEffects %*% t(leftFactor) +
+                        matrix(effectsMean, n.sims, numEffects, byrow = TRUE);
+
+  simulatedFixef[] <- simulatedEffects[, fixefRange, drop = FALSE];
+
+  ranefStart <- cumsum(c(1L, numRanefsPerLevel[-numLevels]));
+  for (k in 1:numLevels) {
+    cols <- (ranefStart[k] - 1) + seq_len(numRanefsPerLevel[k]);
+    slice <- simulatedEffects[, cols, drop = FALSE];
+    # slice rows are draws, columns are (group, coefficient) level-major,
+    # coefficient-minor -- the same layout matrix(v, ncol = n_c, byrow = TRUE)
+    # gave per draw; an array built straight from the slice would come out
+    # coefficient-major, so build (draws, coefficient, group) and transpose.
+    simulatedRanef[[k]] <- aperm(
+      array(slice, c(n.sims, numCoefficientsPerLevel[k], numGroupsPerLevel[k])),
+      c(1, 3, 2));
+    dimnames(simulatedRanef[[k]]) <-
+      list(NULL, groupsPerUniqueFactor[[factorPerLevel[k]]],
+           coefficientNamesPerLevel[[k]]);
   }
 
   ans <- new("sim.merMod",

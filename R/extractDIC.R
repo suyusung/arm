@@ -41,8 +41,24 @@ dic.merMod <- function(fit, n.sims, seed = NULL){
     w <- fit@resp$weights
     D <- function(mu, sigma){
         if (is.glmm) {
-            # for binomial and poisson, family$aic() is -2 * log-likelihood
-            apply(mu, 2, function(m) fam$aic(y, fit@resp$n, m, w, NA))
+            # -2 log p(y | mu) weighted, evaluated columnwise on the
+            # (n obs x n.sims) matrix of draws -- reproduces exactly what
+            # family$aic() computes per draw (binomial folds the weights
+            # into the number of trials when any n > 1), vectorized.
+            if (fam$family == "binomial") {
+                n <- fit@resp$n
+                m <- if (any(n > 1)) n else w
+                coef <- ifelse(m > 0, w / m, 0)
+                d <- dbinom(round(m * y), round(m), mu, log = TRUE)
+            } else {
+                coef <- w
+                d <- dpois(y, mu, log = TRUE)
+            }
+            # density functions drop the matrix dims of mu -- restore the
+            # (n obs x n.sims) shape, as the gaussian branch below does
+            d <- matrix(d, nrow = length(y))
+            d[coef == 0, ] <- 0    # zero-weight rows: 0 * -Inf would be NaN
+            -2 * colSums(d * coef)
         } else {
             sd <- outer(1 / sqrt(w), sigma)
             -2 * colSums(matrix(dnorm(y, mu, sd, log = TRUE), nrow = length(y)))
