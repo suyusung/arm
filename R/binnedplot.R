@@ -48,15 +48,21 @@ binned.resids <- function (x, y, nclass=floor(sqrt(length(x))),
     x.sort <- sort(x)
     breaks <- -Inf
     if(nclass > 1){
+      first <- NULL
       for (i in 1:(nclass-1)){
         x.lo <- x.sort[breaks.index[i]]
         x.hi <- x.sort[breaks.index[i]+1]
         if (x.lo==x.hi){
-            if (x.lo==min(x)){
+            if (is.null(first)) {
+                # The score before the first occurrence is the largest strictly smaller one.
+                first <- match(x.sort[breaks.index], x.sort)
+                xmin <- min(x)
+            }
+            if (x.lo==xmin){
                 x.lo <- -Inf
             }
             else {
-                x.lo <- max (x[x<x.lo])
+                x.lo <- x.sort[[first[i] - 1L]]
             }
         }
         breaks <- c (breaks, (x.lo + x.hi)/2)
@@ -72,10 +78,12 @@ binned.resids <- function (x, y, nclass=floor(sqrt(length(x))),
     nclass <- length(breaks) - 1
     output <- NULL
     xbreaks <- breaks
-    x.binned <- as.numeric (cut (x, breaks))
+    x.binned <- cut(x, breaks)
+    # Keep empty levels. Missing bin codes retain the original NA subscript behavior.
+    rows <- if (!anyNA(x.binned)) split(seq_along(x.binned), x.binned)
 
     for (i in 1:nclass){
-        items <- (1:length(x))[x.binned==i]
+        items <- if (is.null(rows)) seq_along(x.binned)[as.integer(x.binned)==i] else rows[[i]]
         x.range <- range(x[items])
         xbar <- mean(x[items])
         ybar <- mean(y[items])
